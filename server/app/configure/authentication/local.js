@@ -4,6 +4,7 @@ var _ = require('lodash');
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 var UserModel = mongoose.model('User');
+var body = require('body-parser');
 
 module.exports = function (app) {
 
@@ -45,6 +46,30 @@ module.exports = function (app) {
 
         passport.authenticate('local', authCb)(req, res, next);
 
+    });
+
+    //SIGNUP
+    app.post('/signup', function (req, res, next) {
+        console.log(req.body);
+        UserModel.findOne({email: req.body.email}, function (err, user) {
+            if(err) return next(err);
+            else if(user) return next('USER ALREADY EXISTS');
+            else {
+                var newUser = new UserModel();
+                newUser.email = req.body.email;
+                newUser.password = req.body.password;
+                newUser.save(function (err, nUser) {
+                    if(err) return next(err);
+                    else {
+                        console.log(nUser);
+                        req.logIn(nUser, function (err) {
+                            if(err) return next(err);
+                            res.status(200).send({ user: _.omit(nUser.toJSON(), ['password', 'salt']) });
+                        });
+                    }
+                });
+            }
+        });
     });
 
 };
