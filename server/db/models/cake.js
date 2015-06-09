@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 
 var schema = new mongoose.Schema({
+	name: String,
 	type: String, // custom or pre-designed
 	price: {
 		default: 50,
