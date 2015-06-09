@@ -29,6 +29,11 @@ router.get('/', function (req, res, next) {
 
     Promise.all([getData(FillingModel), getData(IcingModel), getData(ShapeModel), getData(LayerModel), getData(ReviewModel)])
     .spread(function (fillings, icings, shapes, layers, reviews) {
+	    console.log("Fillings", fillings);
+	    console.log("Icings", icings);
+	    console.log("shapes", shapes);
+	    console.log("layers", layers);
+	    console.log("reviews", reviews);
 	    res.send(fillings, icings, shapes, layers, reviews);
     })
 
