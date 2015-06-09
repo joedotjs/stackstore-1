@@ -10,7 +10,7 @@ var schema = new mongoose.Schema({
 	image: {
 		type: String,
 		default: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200%C3%97150&w=200&h=150'
-	}
+	},
 	price: {
 		default: 50,
 		type: Number
