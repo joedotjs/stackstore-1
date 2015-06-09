@@ -1,9 +1,13 @@
 <button ui-sref="adminHome">Back to Admin Home</button>
-<h1>{{cateName}} List</h1>
+<h1>Stock Cake List</h1>
 
 <div ng-repeat="item in itemList">
-	<h3>{{item.name}} <span ng-show="cateName !== 'Shape'">- ${{item.price}}</span></h3>
-	<p>{{item.description}}</p>
+    <h5>Shape: {{ cake.shape }}</h5>
+    <h5>Icing: {{ cake.icing }}</h5>
+    <h5>Layers: {{ cake.layers }}</h5>
+    <h5>Price: {{ cake.price }}</h5>
+    <h5>Icing: {{ cake.icing }}</h5>
+    
 	<button ng-click="showEditItem(item._id)">Edit</button>
 	<button ng-click="deleteItem(item._id)">Delete</button>
 	<admin-item-form ng-show="!newItem"></admin-item-form>
