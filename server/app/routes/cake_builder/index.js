@@ -18,7 +18,7 @@ var ReviewModel = mongoose.model('Review');
 
 router.get('/', function (req, res, next) {
     
-    console.log("you hit build a cake");
+    // console.log("you hit build a cake");
 
     var getData = function(model){
 
@@ -29,22 +29,14 @@ router.get('/', function (req, res, next) {
 
     Promise.all([getData(FillingModel), getData(IcingModel), getData(ShapeModel), getData(LayerModel), getData(ReviewModel)])
     .spread(function (fillings, icings, shapes, layers, reviews) {
-	    console.log("Fillings", fillings);
-	    console.log("Icings", icings);
-	    console.log("shapes", shapes);
-	    console.log("layers", layers);
-	    console.log("reviews", reviews);
-	    res.send(fillings, icings, shapes, layers, reviews);
+	    // console.log("Fillings", fillings);
+	    // console.log("Icings", icings);
+	    // console.log("shapes", shapes);
+	    // console.log("layers", layers);
+	    // console.log("reviews", reviews);
+        var ingredients = [fillings, icings, shapes, layers, reviews]
+	    res.send(ingredients);
     })
 
 
-    // CakeModel.create({
-    //     name: "Test Cake",
-    //     type : "Custom"
-    // }, function(err, cake){
-    //     console.log("Test Cake created", cake);
-    //     res.redirect("/");
-    // });
-
-	// res.redirect("/");
 });
