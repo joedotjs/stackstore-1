@@ -18,14 +18,11 @@ var ReviewModel = mongoose.model('Review');
 
 router.get('/', function (req, res, next) {
     
-    // console.log("you hit build a cake");
-
     var getData = function(model){
 
  	 	return model.find().exec()
     
     }
-
 
     Promise.all([getData(FillingModel), getData(IcingModel), getData(ShapeModel), getData(LayerModel), getData(ReviewModel)])
     .spread(function (fillings, icings, shapes, layers, reviews) {
@@ -37,6 +34,4 @@ router.get('/', function (req, res, next) {
         var ingredients = [fillings, icings, shapes, layers, reviews]
 	    res.send(ingredients);
     })
-
-
 });
