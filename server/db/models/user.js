@@ -24,7 +24,10 @@ var schema = new mongoose.Schema({
     google: {
         id: String
     },
-    role: String
+    admin: {
+        type: Boolean,
+        default: false
+    }
 });
 
 // generateSalt, encryptPassword and the pre 'save' and 'correctPassword' operations
