@@ -50,7 +50,18 @@ app.controller('StoreCtrl', function ($scope, AuthService, $state, StoreFCT, $lo
         cartData.push(cake);
 
         $localStorage.cart = cartData;
-    } 
+    }
+
+    $scope.removeFromCart = function (cake) {
+
+        if (!$localStorage.cart) return;
+
+        for (var i = 0; i < $localStorage.cart.length; i++) {
+            if ($localStorage.cart[i]._id === cake._id) {
+                $localStorage.cart.splice(i, 1)
+            }
+        }
+    }
 
 
 
