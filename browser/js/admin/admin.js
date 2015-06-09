@@ -12,10 +12,10 @@ app.config(function ($stateProvider) {
         templateUrl: 'js/admin/list.html',
         controller: 'AdminCateogryCtrl'
     });
-    // .state('adminIcingEdit', {
-    //     url: '/admin/icing',
-    //     templateUrl: 'js/admin/cateogryEdit.html',
-    //     controller: 'AdminIcingCtrl'
+    // .state('adminCategory.view', {
+    //     url: '/admin/:category',
+    //     templateUrl: 'js/admin/cateogryEdit.html', //new template
+    //     controller: 'AdminCateogryCtrl'
     // });
 
 });
