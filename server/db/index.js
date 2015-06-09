@@ -14,6 +14,7 @@ var db = mongoose.connect(DATABASE_URI).connection;
 require('./models/user');
 require('./models/cart');
 require('./models/filling');
+require('./models/cake');
 require('./models/icing');
 require('./models/layer');
 require('./models/review');
