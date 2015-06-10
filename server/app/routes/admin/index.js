@@ -10,26 +10,21 @@ var Promise = require('bluebird');
 //icing/
 var IcingModel = mongoose.model('Icing');
     router.post('/icing/create', function (req, res, next) {
-        console.log(req.body);
         var Icing = new IcingModel(req.body);
         Icing.save(function (err, icing) {
             if(err) next(err);
-            console.log('NEW ICING', icing);
             res.send(icing);
         });
     });
     router.post('/icing/:id', function (req, res, next) {
-        console.log('UPDATED FIELDS', req.body)
         IcingModel.findOneAndUpdate({_id: req.params.id}, req.body, {upsert: false}, function (err, icing) {
             if(err) next(err);
-            console.log('EDITED ICING', icing);
             res.send(icing);
         });
     });
     router.get('/icing/delete/:id', function (req, res, next) {
         IcingModel.find({_id: req.params.id}).remove(function (err, data) {
             if(err) res.send(400);
-            console.log('DELETED DATA?', data);
             res.sendStatus(200);
         });
     });
@@ -43,26 +38,21 @@ var IcingModel = mongoose.model('Icing');
 //filling/
 var FillingModel = mongoose.model('Filling');
     router.post('/filling/create', function (req, res, next) {
-        console.log(req.body);
         var Filling = new FillingModel(req.body);
         Filling.save(function (err, filling) {
             if(err) next(err);
-            console.log('NEW Filling', filling);
             res.send(filling);
         });
     });
     router.post('/filling/:id', function (req, res, next) {
-        console.log('UPDATED FIELDS', req.body)
         FillingModel.findOneAndUpdate({_id: req.params.id}, req.body, {upsert: false}, function (err, filling) {
             if(err) next(err);
-            console.log('EDITED Filling', filling);
             res.send(filling);
         });
     });
     router.get('/filling/delete/:id', function (req, res, next) {
         FillingModel.find({_id: req.params.id}).remove(function (err, data) {
             if(err) res.send(400);
-            console.log('DELETED DATA?', data);
             res.sendStatus(200);
         });
     });
@@ -76,26 +66,21 @@ var FillingModel = mongoose.model('Filling');
 //shape/
 var ShapeModel = mongoose.model('Shape');
     router.post('/shape/create', function (req, res, next) {
-        console.log(req.body);
         var Shape = new ShapeModel(req.body);
         Shape.save(function (err, shape) {
             if(err) next(err);
-            console.log('NEW Shape', shape);
             res.send(shape);
         });
     });
     router.post('/shape/:id', function (req, res, next) {
-        console.log('UPDATED FIELDS', req.body)
         ShapeModel.findOneAndUpdate({_id: req.params.id}, req.body, {upsert: false}, function (err, shape) {
             if(err) next(err);
-            console.log('EDITED Shape', shape);
             res.send(shape);
         });
     });
     router.get('/shape/delete/:id', function (req, res, next) {
         ShapeModel.find({_id: req.params.id}).remove(function (err, data) {
             if(err) res.send(400);
-            console.log('DELETED DATA?', data);
             res.sendStatus(200);
         });
     });
@@ -109,26 +94,21 @@ var ShapeModel = mongoose.model('Shape');
 //cake/
 var CakeModel = mongoose.model('Cake');
     router.post('/cake/create', function (req, res, next) {
-        console.log(req.body);
         var Cake = new CakeModel(req.body);
         Cake.save(function (err, cake) {
             if(err) next(err);
-            console.log('NEW Cake', cake);
             res.send(cake);
         });
     });
     router.post('/cake/:id', function (req, res, next) {
-        console.log('UPDATED FIELDS', req.body)
         CakeModel.findOneAndUpdate({_id: req.params.id}, req.body, {upsert: false}, function (err, cake) {
             if(err) next(err);
-            console.log('EDITED Cake', cake);
             res.send(cake);
         });
     });
     router.get('/cake/delete/:id', function (req, res, next) {
         CakeModel.find({_id: req.params.id}).remove(function (err, data) {
             if(err) res.send(400);
-            console.log('DELETED DATA?', data);
             res.sendStatus(200);
         });
     });
@@ -139,7 +119,6 @@ var CakeModel = mongoose.model('Cake');
             .populate('filling','name description price')
             .populate('reviews').exec(function (err, cakesArr){
                 if(err) next(err);
-                // console.log('CAKES ARR', cakesArr);
                 res.send(cakesArr);
         });
     });

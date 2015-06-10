@@ -26,7 +26,6 @@ app.controller('AdminCtrl', function ($scope, $state, AdminFCT) {
 
 app.controller('AdminCakeCtrl', function ($scope, $state, AdminFCT) {
     AdminFCT.getAllCake().then(function (data) {
-        console.log('RETURN', data)
         $scope.itemList = data.data;
     });
 });
@@ -37,21 +36,18 @@ app.controller('AdminCateogryCtrl', function ($scope, $state, AdminFCT, $statePa
 
     if($stateParams.category === 'icing') {
         AdminFCT.getAllIcing().then(function (data) {
-            console.log('DATA FOR ICING', data);
             $scope.cateName = 'Icing';
             $scope.itemList = data.data;
         });
     }
     else if($stateParams.category === 'filling') {
         AdminFCT.getAllFilling().then(function (data) {
-            console.log('DATA FOR FILLING', data);
             $scope.cateName = 'Filling';
             $scope.itemList = data.data;
         });
     }
     else if($stateParams.category === 'shape') {
         AdminFCT.getAllShape().then(function (data) {
-            console.log('DATA FOR FILLING', data);
             $scope.cateName = 'Shape';
             $scope.itemList = data.data;
         });
@@ -109,7 +105,6 @@ app.controller('AdminCateogryCtrl', function ($scope, $state, AdminFCT, $statePa
     $scope.deleteItem = function(itemId) {
         if($stateParams.category === 'icing') {
             AdminFCT.deleteIcing(itemId).then(function (data) {
-                console.log('DATA', data);
                 $scope.itemList = $scope.itemList.filter(function (obj) {
                     if(obj._id !== itemId) return obj;
                 });
@@ -117,7 +112,6 @@ app.controller('AdminCateogryCtrl', function ($scope, $state, AdminFCT, $statePa
         }
         else if($stateParams.category === 'filling') {
             AdminFCT.deleteFilling(itemId).then(function (data) {
-                console.log('DATA', data);
                 $scope.itemList = $scope.itemList.filter(function (obj) {
                     if(obj._id !== itemId) return obj;
                 });
@@ -125,7 +119,6 @@ app.controller('AdminCateogryCtrl', function ($scope, $state, AdminFCT, $statePa
         }
         else if($stateParams.category === 'shape') {
             AdminFCT.deleteShape(itemId).then(function (data) {
-                console.log('DATA', data);
                 $scope.itemList = $scope.itemList.filter(function (obj) {
                     if(obj._id !== itemId) return obj;
                 });
