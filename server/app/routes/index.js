@@ -7,6 +7,7 @@ router.use('/members', require('./members'));
 router.use('/store', require('./store'));
 router.use('/cake_builder', require('./cake_builder'));
 router.use('/admin', require('./admin'));
+router.use('/cart', require('./cart'));
 
 
 // Make sure this is after all of
