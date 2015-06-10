@@ -16,12 +16,24 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('StoreSingleCtrl', function ($scope, $state, StoreFCT, $stateParams) {
+app.controller('StoreSingleCtrl', function ($scope, $state, StoreFCT, $stateParams, $localStorage) {
+
+    var cartData = [];
+
     StoreFCT.getOne($stateParams.id)
         .then(function (data) {
             console.log('SINGLE CAKE', data);
             $scope.cake = data.data;
         });
+
+    $scope.addToCart = function (cake) {
+        StoreFCT.addToCart($localStorage, cartData, cake);
+    }
+
+    $scope.removeFromCart = function (cake) {
+        StoreFCT.removeFromCart($localStorage, cartData, cake);
+    }
+
 });
 
 app.controller('StoreCtrl', function ($scope, AuthService, $state, StoreFCT, $localStorage) {
@@ -40,27 +52,11 @@ app.controller('StoreCtrl', function ($scope, AuthService, $state, StoreFCT, $lo
     });
 
     $scope.addToCart = function (cake) {
-
-        // we will need a condition here to handle authenticated users
-
-        if ($localStorage.cart) {
-            cartData = $localStorage.cart;
-        }
-
-        cartData.push(cake);
-
-        $localStorage.cart = cartData;
+        StoreFCT.addToCart($localStorage, cartData, cake);
     }
 
     $scope.removeFromCart = function (cake) {
-
-        if (!$localStorage.cart) return;
-
-        for (var i = 0; i < $localStorage.cart.length; i++) {
-            if ($localStorage.cart[i]._id === cake._id) {
-                $localStorage.cart.splice(i, 1)
-            }
-        }
+        StoreFCT.removeFromCart($localStorage, cartData, cake);
     }
 
 
