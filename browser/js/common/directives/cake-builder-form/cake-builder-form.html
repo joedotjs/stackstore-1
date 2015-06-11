@@ -19,23 +19,23 @@
         <br>
         <br>
         <p><b>Cake Shape</b></p>
-        {{cake.shape.type}}
+        {{cake.shape}}
         <br>
         <br>
         <p><b>Cake Icing</b></p>
-        {{cake.icing.name}}
+        {{cake.icing}}
         <br>
         <br>
         <p><b>Layer 1 Filling (if at all)</b></p>
-        {{cake['layers'][0]['filling']['name']}}
+        {{cake['layers'][0]['filling']}}
         <br>
         <br>
         <p><b>Layer 2 Filling (if at all)</b></p>
-        {{cake['layers'][1]['filling']['name']}}
+        {{cake['layers'][1]['filling']}}
         <br>
         <br>
         <p><b>Layer 3 Filling (if at all)</b></p>
-        {{cake['layers'][2]['filling']['name']}}
+        {{cake['layers'][2]['filling']}}
         <br>
         <br>
         <p><b>Cake Price</b></p>
@@ -77,7 +77,7 @@
         <error-message ng-show="editCardForm.category.$touched && editCardForm.category.$error.required">
             You need to select a category.
         </error-message>
-        <select ng-model="shapeSelected" ng-change="update(shape, shapeSelected)" data-ng-options="shape as shape.type for shape in shapes">
+        <select ng-model="cake.shape" ng-change="update('shape', cake.shape)" data-ng-options="shape as shape.type for shape in shapes">
             <option value="">Select Shape</option>
         </select>
         
@@ -85,7 +85,7 @@
         <br>
 
         <span>Icing</span>
-        <select ng-model="icingSelected" ng-change="update(icing, icingSelected)" data-ng-options="icing as icing.name for icing in icings">
+        <select ng-model="cake.icing" ng-change="update('icing', cake.icing)" data-ng-options="icing as icing.name for icing in icings">
             <option value="">Select Shape</option>
         </select>
 
@@ -94,7 +94,7 @@
             <br>
             <span>Layer One Filling</span>
 
-            <select ng-model="cake.layers[0].filling" ng-change="update(filling, numLayerSelected)" data-ng-options="filling as filling.name for filling in fillings">
+            <select ng-model="cake.layers[0].filling" ng-change="update('layers', cake.layers[0].filling, '1')" data-ng-options="filling as filling.name for filling in fillings">
                 <option value="">Select Filling</option>
             </select>
 
@@ -106,7 +106,7 @@
             <br>
             <span>Layer Two Filling</span>
 
-            <select ng-model="cake.layers[1].filling" ng-change="update(filling, numLayerSelected)" data-ng-options="filling as filling.name for filling in fillings">
+            <select ng-model="cake.layers[1].filling" ng-change="update('layers', cake.layers[1].filling, '2')" data-ng-options="filling as filling.name for filling in fillings">
                 <option value="">Select Filling</option>
             </select>
         </div>
@@ -115,10 +115,27 @@
             <br>
             <span>Layer Three Filling</span>
 
-            <select ng-model="cake.layers[2].filling" ng-change="update(filling, numLayerSelected)" data-ng-options="filling as filling.name for filling in fillings">
+            <select ng-model="cake.layers[2].filling" ng-change="update('layers', cake.layers[2].filling, '3')" data-ng-options="filling as filling.name for filling in fillings">
                 <option value="">Select Filling</option>
             </select>
         </div>
+        <br>
+        <br>
+        <button type="submit" >Build Cake!</button>
+        <p><b>Cake Price</b></p>
+        <p>${{cake.price}}</p>
+        <br>
+        <br>
+    </form>
+</div>
+        <!-- <button ng-click="deleteCake(cake.name)">Delete Cake</button> -->
+
+
+
+
+
+
+
     <!--                 <span>Question</span>
         <error-message ng-show="editCardForm.question.$touched && editCardForm.question.$error.required">
             Question is a required field.
@@ -145,13 +162,3 @@
         </error-message>
         <input ng-model="editedCard.answers[2].text"  required ng-maxlength="40" type="text" name="Answer3"><br>
         <input ng-model="editedCard.answers[2].correct" type="checkbox" value="Check">This the correct answer<br> -->
-        <br>
-        <br>
-        <button type="submit" >Build Cake!</button>
-        <p><b>Cake Price</b></p>
-        <p>${{cake.price}}</p>
-        <br>
-        <br>
-    </form>
-</div>
-        <!-- <button ng-click="deleteCake(cake.name)">Delete Cake</button> -->

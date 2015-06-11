@@ -9,7 +9,7 @@ app.directive('buildForm', function (CakeFactory, $localStorage) {
                 CakeFactory.getAllIngredients().then(function(ingredients){
 
                     
-
+                    console.log(ingredients.data)
                     //make ingredients available on scope
                     scope.fillings = ingredients.data[0]
                     scope.icings = ingredients.data[1]
@@ -28,6 +28,7 @@ app.directive('buildForm', function (CakeFactory, $localStorage) {
                         ,{position: 2, filling: null},{ position: 3, filling: null}]
                         ,
                         reviews: null,
+
                     }
 
                     if(!$localStorage.cake){
@@ -44,83 +45,145 @@ app.directive('buildForm', function (CakeFactory, $localStorage) {
                         };
                     }
 
-                    //to update cake object properties
-                    scope.update = function(prop, selected){
-                        console.log("prop",prop)
-                        if(prop !== "filling") scope.cake[prop] = selected;
-                        console.log(scope.cake)
+                    scope.currentPrices = {
 
-                        //check for layers desired and modify scope.cake.layers
-                        if(scope.cake["selectedNumLayers"]=== 1) {
-                            if(scope.cake.layers[1].filling !== null){
-                                scope.cake.layers[1].filling = null;
-                            }
-                            if(scope.cake.layers[2].filling !== null){
-                                scope.cake.layers[2].filling = null;
-                            }
-                            angular.element(layerTwo).css("display","none")
-                            angular.element(layerThree).css("display","none")
-                        }
+                        layers : [
+                            {position: 1, filling: null},
+                            {position: 2, filling: null},
+                            {position: 3, filling: null}
+                        ]
 
-                        if(scope.cake["selectedNumLayers"]=== 2) {
-                            if(scope.cake.layers[2].filling !== null){
-                                scope.cake.layers[2].filling = null;
-                            }
-                            angular.element(layerTwo).css("display","block")
-                            angular.element(layerThree).css("display","none")
-                            
-                        }
-                        if(scope.cake["selectedNumLayers"]=== 3) {
-                            angular.element(layerTwo).css("display","block")
-                            angular.element(layerThree).css("display","block")
-     
-                        }
 
-                        //update localStorage.cake when scope.cake updates
-                        scope.setCakeLocal = function(cake){
-                            for(var key in cake){
-                                $localStorage.cake.key = cake.key
-                            }
-                        }
-                        scope.setCakeLocal(scope.cake)
 
-                        //update price of cake
-                        scope.priceUpdate = function(){
-
-                            scope.cake.price = 0
-
-                            if(scope.cake.icing !== null){
-                                scope.cake.price += scope.cake.icing.price
-                            }
-
-                            for(var i=0; i < 3; i++){
-                                
-                                if(scope.cake.layers[i].filling !== null){
-                                    scope.cake.price += scope.cake.layers[i].filling.price
-                                }
-
-                            }
-                            console.log(scope.cake.price)
-                        }
-                        scope.priceUpdate();
-                        
                     }
 
-                    //for selecting the property to update w update function
-                    scope.filling = "filling"
+                    if(!$localStorage.currentPrices){
+                        $localStorage.currentPrices = {
+                            
+                            layers : [
+                                {position: 1, filling: null},
+                                {position: 2, filling: null},
+                                {position: 3, filling: null}
+                            ]
+                        }
+                    }
+
+                    //store cost of last selected item to subtract from price upon replacement
+                    // scope.cake.previousIcingPrice = 0 ;
+                    // scope.cake.previousFillingPrice = [0,0,0];
+
+                    //to update cake object properties
+                    scope.update = function(propName, propObj, layerNum){
+
+                        //set scope.cake property
+                        if(propName === "selectedNumLayers"){
+                            scope.cake.selectedNumLayers = propObj
+                        }
+
+                        //set properties on cake object and cake pricing object
+                        
+                        if(propName === "shape" || propName === "icing"){
+                            
+                            scope.cake[propName] = propObj._id
+                            
+                            scope.currentPrices[propName] = propObj
+                            
+                        }
+
+                        if(layerNum === '1' || layerNum === '2' || layerNum === '3' ){
+                            
+                            scope.cake[propName][layerNum-1]['filling'] = propObj._id
+                           
+                            scope.currentPrices[propName][layerNum-1]['filling'] = propObj
+                          
+                        }
+
+
+
+                        //check for layers desired and modify scope.cake.layers
+                        
+                        if(propName === "selectedNumLayers"){
+                            // console.log(propObj)
+                            if(propObj=== 1) {
+                                if(scope.cake.layers[1].filling !== null){
+                                    scope.cake.layers[1].filling = null;
+                                }
+                                if(scope.cake.layers[2].filling !== null){
+                                    scope.cake.layers[2].filling = null;
+                                }
+                                angular.element(layerTwo).css("display","none")
+                                angular.element(layerThree).css("display","none")
+                            }
+
+                            if(propObj=== 2) {
+                                if(scope.cake.layers[2].filling !== null){
+                                    scope.cake.layers[2].filling = null;
+                                }
+                                angular.element(layerTwo).css("display","block")
+                                angular.element(layerThree).css("display","none")
+                                
+                            }
+                            if(propObj=== 3) {
+                                angular.element(layerTwo).css("display","block")
+                                angular.element(layerThree).css("display","block")
+         
+                            }
+                        }
+
+                        //update localStorage when we change the cake
+                        scope.setCakeLocal = function(cake, priceTracker){
+                            for(var key in cake){
+                                $localStorage.cake.key = cake.key
+                                
+                            }
+                            for(var key in priceTracker){
+                                $localStorage.currentPrices.key = priceTracker.key
+                            }
+    
+                            delete cake.key
+                            delete priceTracker.key
+                        }
+                        scope.setCakeLocal(scope.cake, scope.currentPrices)
+
+
+     
+                        //regenerate prices when we change the cake
+                        scope.updatePrice = function(){
+                            scope.cake.price = 0;
+                            console.log("setting prices: price tracker", scope.currentPrices)
+                            if(scope.currentPrices.icing){
+                                scope.cake.price += scope.currentPrices.icing.price;
+                            }
+                            if(scope.currentPrices.layers[0].filling !== null){
+                                scope.cake.price += scope.currentPrices.layers[0].filling.price
+                            }
+                            if(scope.currentPrices.layers[1].filling !== null){
+                                scope.cake.price += scope.currentPrices.layers[1].filling.price
+                            }
+                            if(scope.currentPrices.layers[2].filling !== null){
+                                scope.cake.price += scope.currentPrices.layers[2].filling.price
+                            }
+                            console.log("cake", scope.cake)    
+
+                        }
+                        scope.updatePrice()
+                    }
+
+                    // //for selecting the property to update w update function
                     scope.selectedNumLayers = "selectedNumLayers"
-                    scope.icing = "icing"
-                    scope.shape = "shape"
                     scope.numLayers = [1,2,3]
  
                     
-                    //bring storeCake function to scope
+                    // //bring storeCake function to scope
                     scope.storeCake = CakeFactory.storeCake
 
                     //persist cake in progress from local storage
                     scope.loadCakeFromLocal = function (){
                         scope.cake = $localStorage.cake;
-                        console.log("loaded cake from localStorage",scope.cake)                       
+                        scope.currentPrices = $localStorage.currentPrices
+                        console.log("loaded cake from localStorage",scope.cake)
+                        console.log("loaded prices from localStorage", scope.currentPrices)    
+
                     }
                     scope.loadCakeFromLocal();
 

@@ -24,8 +24,11 @@ var schema = new mongoose.Schema({
 		ref: 'Icing'
 	},
 	layers: [{
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Layer'
+		position: Number,
+    	filling: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Filling'
+		}
 	}],
 	reviews: [{
 		type: mongoose.Schema.Types.ObjectId,
