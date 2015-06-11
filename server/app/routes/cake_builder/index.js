@@ -23,7 +23,7 @@ router.get('/', function (req, res, next) {
     
     }
 
-    Promise.all([getData(FillingModel), getData(IcingModel), getData(ShapeModel), getData(LayerModel), getData(ReviewModel)])
+    Promise.all([getData(FillingModel), getData(IcingModel), getData(ShapeModel), getData(ReviewModel)])
     .then(function(ingredients){
 
     	res.send(ingredients)

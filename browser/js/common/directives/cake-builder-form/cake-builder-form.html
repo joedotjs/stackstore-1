@@ -19,7 +19,7 @@
         <br>
         <br>
         <p><b>Cake Shape</b></p>
-        {{currentPrices.shape.type}}
+        {{currentPrices.shape.name}}
         <br>
         <br>
         <p><b>Cake Icing</b></p>
@@ -78,7 +78,7 @@
         <error-message ng-show="editCardForm.category.$touched && editCardForm.category.$error.required">
             You need to select a category.
         </error-message>
-        <select ng-model="cake.shape" ng-change="update('shape', cake.shape)" data-ng-options="shape as shape.type for shape in shapes">
+        <select ng-model="cake.shape" ng-change="update('shape', cake.shape)" data-ng-options="shape as shape.name for shape in shapes">
             <option value="">Select Shape</option>
         </select>
         {{currentPrices.shape.type}}

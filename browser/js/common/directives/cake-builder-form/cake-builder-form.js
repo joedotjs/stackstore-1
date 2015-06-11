@@ -6,6 +6,7 @@ app.directive('buildForm', function (CakeFactory, $localStorage) {
         templateUrl: 'js/common/directives/cake-builder-form/cake-builder-form.html',
         link: function (scope) {
 
+
                 CakeFactory.getAllIngredients().then(function(ingredients){
 
                     

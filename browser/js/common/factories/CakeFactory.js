@@ -1,4 +1,4 @@
-app.factory('CakeFactory', function ($http, $localStorage) {
+app.factory('CakeFactory', function ($http, $localStorage, CartFactory) {
 
     return {
         getAllIngredients: function () {
