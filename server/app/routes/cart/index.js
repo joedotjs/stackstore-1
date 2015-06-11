@@ -5,15 +5,77 @@ var _ = require('lodash');
 var body = require('body-parser');
 var mongoose = require('mongoose');
 var Promise = require('bluebird');
+
 var Cart = mongoose.model('Cart');
 
+router.get('/:id', function (req, res, next) {
 
-
-router.get('/', function (req, res, next) {
-	console.log('test');
-    Cart.find({}, function (err, cart) {
-        console.log('cart', cart);
+    Cart.find({ user : req.params.id }, function (err, cart) {
         if(err) next(err);
         res.send(cart);
-    })
+    });
+
+});
+
+
+router.post('/add', function (req, res, next) {
+
+    var user = req.body.user.data.user._id;
+    var cart = req.body.cart.map(function (cake) {
+        return cake._id
+    });
+
+    var newUserCart = new Cart({ user : user, cakes : cart });
+
+    newUserCart.save(function (err) {
+        if(err) next(err);
+        res.send("doneski");
+    });
+
+});
+
+router.put('/update', function (req, res, next) {
+
+    var user = req.body.user._id;
+    var cart;
+
+    Cart.findOne({ user : user }).exec().then(function (userCart) {
+
+        if (_.isArray(req.body.cart)) {
+
+            cart = req.body.cart.map(function (cake) {
+                return cake._id;
+            });
+
+            cart.forEach(function (cake) {
+                userCart.cakes.addToSet(cake);
+            });
+
+        } else {
+
+            userCart.cakes.addToSet(req.body.cart._id);
+
+        }
+
+        return userCart.save();
+
+    }, next);
+
+});
+
+
+router.delete('/:id', function (req, res, next) {
+
+    var cake = req.params.id;
+    console.log('CAKE ID', cake);
+
+    Cart.findOne({ user : req.user._id }).exec().then(function (userCart) {
+        
+        userCart.cakes.remove(cake);
+        return userCart.save();
+
+    }, next);
+
+
+
 });

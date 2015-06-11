@@ -36,7 +36,7 @@ app.controller('StoreSingleCtrl', function ($scope, $state, StoreFCT, $statePara
 
 });
 
-app.controller('StoreCtrl', function ($scope, AuthService, $state, StoreFCT, $localStorage) {
+app.controller('StoreCtrl', function ($scope, AuthService, $state, StoreFCT, $localStorage, CartFactory) {
 
     var cartData = [];
 
@@ -52,11 +52,34 @@ app.controller('StoreCtrl', function ($scope, AuthService, $state, StoreFCT, $lo
     });
 
     $scope.addToCart = function (cake) {
-        StoreFCT.addToCart($localStorage, cartData, cake);
+
+        if (AuthService.isAuthenticated()) {
+
+            AuthService.getLoggedInUser().then(function (user) {
+                StoreFCT.addToAuthCart(user, cake, CartFactory);
+            });
+
+        } else {
+
+            StoreFCT.addToUnauthCart($localStorage, cartData, cake);
+
+        }
     }
 
     $scope.removeFromCart = function (cake) {
-        StoreFCT.removeFromCart($localStorage, cartData, cake);
+
+        if (AuthService.isAuthenticated()) {
+
+            AuthService.getLoggedInUser().then(function (user) {
+                StoreFCT.removeFromAuthCart(user, cake, CartFactory);
+            });
+
+        } else {
+
+            StoreFCT.removeFromUnauthCart($localStorage, cartData, cake);
+
+        }
+
     }
 
 

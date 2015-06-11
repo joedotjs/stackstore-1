@@ -9,11 +9,22 @@ app.config(function ($stateProvider) {
 });
 
 
-app.controller('CartCtrl', function ($scope, $state, StoreFCT, $stateParams, $localStorage) {
+app.controller('CartCtrl', function ($scope, $state, $stateParams, $localStorage, CartFactory, AuthService, AUTH_EVENTS) {
 
     var cartData = [];
-    // console.log('test', $localStorage);
-    $scope.localCart = $localStorage;
-    // $scope.items = 
+    $scope.carts = $localStorage.cart;
+
+    if (AuthService.isAuthenticated()) {
+		AuthService.getLoggedInUser().then(function (user) {
+	        $scope.user = user;
+	    }).then(function () {
+	    	var getCart = CartFactory.getCartByUser($scope.user);
+	    	return getCart;
+	    }).then(function (cart) {
+	    	$scope.carts = cart.data[0].cakes;
+	    	$scope.loggedIn = true;
+	    });
+	}
+
 
 });

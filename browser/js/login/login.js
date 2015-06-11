@@ -8,7 +8,7 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('LoginCtrl', function ($scope, AuthService, $state) {
+app.controller('LoginCtrl', function ($scope, AuthService, $state, $localStorage, CartFactory) {
 
     $scope.login = {};
     $scope.error = null;
@@ -17,7 +17,10 @@ app.controller('LoginCtrl', function ($scope, AuthService, $state) {
 
         $scope.error = null;
 
-        AuthService.login(loginInfo).then(function () {
+        AuthService.login(loginInfo).then(function (user) {
+            CartFactory.updateCart($localStorage.cart, user);
+        }).then(function () {
+            $localStorage.cart = [];
             $state.go('home');
         }).catch(function () {
             $scope.error = 'Invalid login credentials.';

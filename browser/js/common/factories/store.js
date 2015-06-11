@@ -15,8 +15,19 @@ app.factory('StoreFCT', function ($http) {
         });
     };
 
-    var addToCart = function ($localStorage, cartData, cake) {
-        // we will need a condition here to handle authenticated users
+    var addToAuthCart = function (user, cake, CartFactory) {
+        
+        CartFactory.updateCart(cake, user);
+
+    };
+
+    var removeFromAuthCart = function (user, cake, CartFactory) {
+
+        CartFactory.deleteFromCart(cake);
+
+    };
+
+    var addToUnauthCart = function ($localStorage, cartData, cake) {
 
         if ($localStorage.cart) {
             cartData = $localStorage.cart;
@@ -27,7 +38,8 @@ app.factory('StoreFCT', function ($http) {
         $localStorage.cart = cartData;
     };
 
-    var removeFromCart = function ($localStorage, cartData, cake) {
+    var removeFromUnauthCart = function ($localStorage, cartData, cake) {
+
         if (!$localStorage.cart) return;
 
         for (var i = 0; i < $localStorage.cart.length; i++) {
@@ -35,13 +47,15 @@ app.factory('StoreFCT', function ($http) {
                 $localStorage.cart.splice(i, 1)
             }
         }
-    }
+    };
 
     return {
         getAll: getAll,
         getOne: getOne,
-        addToCart: addToCart,
-        removeFromCart: removeFromCart
+        addToAuthCart: addToAuthCart,
+        addToUnauthCart: addToUnauthCart,
+        removeFromAuthCart: removeFromAuthCart,
+        removeFromUnauthCart: removeFromUnauthCart
     };
 
 });

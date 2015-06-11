@@ -100,14 +100,15 @@
         this.signup = function (credentials) {
             console.log(credentials);
             return $http.post('/signup', credentials)
-                .then(successSignUpFunct)
+                .then(successSignUpFunct(credentials))
                 .catch(function (response) {
                     return $q.reject({ message: 'Invalid signup credentials.' });
                 });
         };
 
-        function successSignUpFunct(response) {
-            console.log('SUCCESS', response);
+        function successSignUpFunct(credentials) {
+            console.log('SUCCESS', credentials);
+            return credentials;
         }
 
     });
