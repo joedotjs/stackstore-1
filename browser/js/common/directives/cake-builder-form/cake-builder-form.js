@@ -78,6 +78,7 @@ app.directive('buildForm', function (CakeFactory, $localStorage) {
                         //set scope.cake property
                         if(propName === "selectedNumLayers"){
                             scope.cake.selectedNumLayers = propObj
+                            scope.currentPrices.selectedNumLayers = propObj
                         }
 
                         //set properties on cake object and cake pricing object
@@ -129,6 +130,10 @@ app.directive('buildForm', function (CakeFactory, $localStorage) {
          
                             }
                         }
+
+
+
+
 
                         //update localStorage when we change the cake
                         scope.setCakeLocal = function(cake, priceTracker){

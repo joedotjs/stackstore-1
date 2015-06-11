@@ -12,6 +12,7 @@ app.factory('CakeFactory', function ($http, $localStorage) {
         		// console.log("cake sent to database");
         		// console.log(cake)
         		delete $localStorage.cake
+        		delete $localStorage.currentPrices
         		return cake
         	});
         }

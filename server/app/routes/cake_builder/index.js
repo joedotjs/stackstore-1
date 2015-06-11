@@ -35,9 +35,10 @@ router.get('/', function (req, res, next) {
 router.post('/', function (req, res, next){
 
 	console.log("hit cake post route")
-	console.log("cake", req.body)
 	var cake = req.body
-	res.send(cake)
+	delete cake.selectedNumLayers
+	
+	// res.send(cake)
 
 	// var newCake = new CakeModel(cake);
 	// newCake.save(function (err) {
@@ -46,12 +47,13 @@ router.post('/', function (req, res, next){
 	//   console.log("custom cake was saved")
 	// })
 
-	// CakeModel.create(cake, function (err, cake) {
-	// 	if (err) return next(err);
-	// 	console.log("custom cake was saved to database", cake)
-	// 	res.send(cake);
+	CakeModel.create(cake, function (err, cake) {
+		if (err) return next(err);
+		console.log("custom cake was saved to database", cake)
+		console.log("cake", cake)
+		res.send(cake);
 
-	// })
+	})
 
 })
 
