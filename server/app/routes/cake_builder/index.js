@@ -10,7 +10,6 @@ var CakeModel = mongoose.model('Cake');
 
 var IcingModel = mongoose.model('Icing');
 var FillingModel = mongoose.model('Filling');
-var LayerModel = mongoose.model('Layer');
 var ShapeModel = mongoose.model('Shape');
 var ReviewModel = mongoose.model('Review');
 
