@@ -6,6 +6,13 @@
         
         <img id="cakeImg" src="http://cakeexpress.co.in/images/CAKE-BIRTHDAY21.png">
         <p>(We hope you're the type of person who enjoyed alphabet soup.)</p>
+        <br>
+        <br>
+
+        <p><b>Cake Name</b><p>
+        {{cake.name}}
+        <br>
+        <br>
 
         <p><b>Number of Layers</b><p>
         {{cake.selectedNumLayers}}
@@ -31,11 +38,23 @@
         {{cake['layers'][2]['filling']['name']}}
         <br>
         <br>
+        <p><b>Cake Price</b></p>
+        <p>${{cake.price}}</p>
+        <br>
+        <br>
 
 
 
     </div>
         
+    <span>Name your creation!</span>
+    <error-message ng-show="cake.name.$touched && cake.name.$error.required">
+        Cake name is a required field.
+    </error-message>
+    <error-message ng-show="cake.name.$error.minlength">
+        Your cake name needs to be atleast 1 character long.
+    </error-message>
+    <input ng-model="cake.name" type="text" ng-minlength="1" required name="cakename"><br>
 
     <span>How Many Layers on your Cake?</span>
     <select ng-model="numLayerSelected" ng-change="update(selectedNumLayers, numLayerSelected)" data-ng-options="num as num for num in numLayers">
@@ -46,11 +65,13 @@
     <br>
 
 
-    <form name="buildCakeForm" ng-submit="editCardForm.$valid && submitEditCard()">
+    <form name="buildCakeForm" ng-submit="storeCake(cake)">
+
+        <!-- check that cake.$valid is true && execute functions on submit above -->
         
 
 
-
+ 
         <br>
         <span>Shape</span>
         <error-message ng-show="editCardForm.category.$touched && editCardForm.category.$error.required">
@@ -127,5 +148,10 @@
         <br>
         <br>
         <button type="submit" >Build Cake!</button>
+        <p><b>Cake Price</b></p>
+        <p>${{cake.price}}</p>
+        <br>
+        <br>
     </form>
 </div>
+        <!-- <button ng-click="deleteCake(cake.name)">Delete Cake</button> -->
