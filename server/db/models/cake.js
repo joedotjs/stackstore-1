@@ -26,7 +26,7 @@ var schema = new mongoose.Schema({
 	},
 	layers: [{
 		position: Number,
-		filling: {
+    	filling: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Filling'
 		}
