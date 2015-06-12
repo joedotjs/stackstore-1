@@ -20,6 +20,7 @@ var getAll = function(model) {
 
 
 router.get('/', function (req, res, next) {
+    console.log('STORED PARAM', req.storeId);
     Promise.all([getAll(IcingModel),
                 getAll(FillingModel),
                 getAll(ShapeModel),
