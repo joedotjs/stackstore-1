@@ -1,29 +1,27 @@
 app.factory('CakeFactory', function ($http, $localStorage, CartFactory) {
 
     return {
-        getAllIngredients: function () {
-            return $http.get('/api/cake_builder').then(function(ingredients){
-                // console.log("get ingredients hit from front end")
+        getAllIngredients: function (storeId) {
+            return $http.get('/api/store/'+storeId+'/cake_builder').then(function(ingredients){
+                console.log("get ingredients hit from front end", ingredients)
+                
                 return ingredients
             });
         },
-        storeCake: function (cakeObj){
-        	return $http.post('/api/cake_builder', cakeObj).then(function(cake){
-        		// console.log("cake sent to database");
-        		// console.log(cake)
-        		delete $localStorage.cake
+        storeCake: function (cakeObj, storeId){
+
+            return $http.post('/api/store/'+storeId+'/cake_builder', cakeObj).then(function(cake){
+
+        		console.log("cake returned after save",cake)
+                CartFactory.addToCart(cake)
+
+                delete $localStorage.cake
         		delete $localStorage.currentPrices
+
         		return cake
         	});
         }
-        // ,
-        // deleteCake: function (cakeName){
-        // 	console.log("hit the deleteCake", cakeName)
-        // 	return $http.delete('/api/cake_builder/'+cakeName).then(function(cake){
-        // 		console.log("cake delete complete on front end")
-        // 		return cake
-        // 	})
-        // }
+
     };
 
 });

@@ -1,4 +1,4 @@
-app.directive('buildForm', function (CakeFactory, $localStorage) {
+app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, CartFactory) {
 
     return {
         restrict: 'E',
@@ -7,10 +7,9 @@ app.directive('buildForm', function (CakeFactory, $localStorage) {
         link: function (scope) {
 
 
-                CakeFactory.getAllIngredients().then(function(ingredients){
 
-                    
-                    console.log(ingredients.data)
+                CakeFactory.getAllIngredients($stateParams.storeId).then(function(ingredients){
+
                     //make ingredients available on scope
                     scope.fillings = ingredients.data[0]
                     scope.icings = ingredients.data[1]
@@ -142,12 +141,12 @@ app.directive('buildForm', function (CakeFactory, $localStorage) {
                                 $localStorage.cake.key = cake.key
                                 
                             }
-                            for(var key in priceTracker){
-                                $localStorage.currentPrices.key = priceTracker.key
+                            for(var keyd in priceTracker){
+                                $localStorage.currentPrices.keyd = priceTracker.keyd
                             }
     
                             delete cake.key
-                            delete priceTracker.key
+                            delete priceTracker.keyd
                         }
                         scope.setCakeLocal(scope.cake, scope.currentPrices)
 
@@ -178,17 +177,18 @@ app.directive('buildForm', function (CakeFactory, $localStorage) {
                     // //for selecting the property to update w update function
                     scope.selectedNumLayers = "selectedNumLayers"
                     scope.numLayers = [1,2,3]
- 
+                    
+                    //bring storeId to scope
+                    scope.storeId = $stateParams.storeId
                     
                     // //bring storeCake function to scope
+                    // scope.storeCake = CakeFactory.storeCake
                     scope.storeCake = CakeFactory.storeCake
 
                     //persist cake in progress from local storage
                     scope.loadCakeFromLocal = function (){
                         scope.cake = $localStorage.cake;
-                        scope.currentPrices = $localStorage.currentPrices
-                        console.log("loaded cake from localStorage",scope.cake)
-                        console.log("loaded prices from localStorage", scope.currentPrices)    
+                        scope.currentPrices = $localStorage.currentPrices    
 
                     }
                     scope.loadCakeFromLocal();

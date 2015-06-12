@@ -39,7 +39,11 @@ router.put('/update', function (req, res, next) {
     var user = req.body.user._id;
     var cart;
 
+    console.log("cake being added to database (should have mongo id)",req.body.cart.data._id)
+
     Cart.findOne({ user : user }).exec().then(function (userCart) {
+
+        // console.log("empty cart",userCart)
 
         if (_.isArray(req.body.cart)) {
 
@@ -53,11 +57,13 @@ router.put('/update', function (req, res, next) {
 
         } else {
 
-            userCart.cakes.addToSet(req.body.cart._id);
+            
+            userCart.cakes.addToSet(req.body.cart.data._id);
 
         }
 
         return userCart.save();
+        
 
     }, next);
 

@@ -1,4 +1,4 @@
-app.factory('CartFactory', function ($http) {
+app.factory('CartFactory', function ($http, AuthService, StoreFCT, $localStorage) {
 
     return {
     	getCartByUser: function (user) {
@@ -24,13 +24,48 @@ app.factory('CartFactory', function ($http) {
                 console.log('test', test);
                 // return test;
             });	
-        }
+        },
         calculateCart: function(cart){
             var cartPrice = 0;
             cart.forEach(function(cake){
                 cartPrice += cake.price;
             })
             return cartPrice;
+        },
+        addToCart: function (cake) {
+
+            console.log("add to cart received cake", cake)
+
+            if (AuthService.isAuthenticated()) {
+
+                AuthService.getLoggedInUser().then(function (user) {
+                    return $http.put('/api/cart/update', { cart : cake, user : user }, function (data) {
+                        console.log('data', data);
+                        // return data; 
+                    });
+                });
+
+            } else {
+
+                StoreFCT.addToUnauthCart($localStorage, [], cake);
+
+            }
+        },
+        
+        removeFromCart: function (cake) {
+
+            if (AuthService.isAuthenticated()) {
+
+                AuthService.getLoggedInUser().then(function (user) {
+                    StoreFCT.removeFromAuthCart(user, cake, CartFactory);
+                });
+
+            } else {
+
+                StoreFCT.removeFromUnauthCart($localStorage, [], cake);
+
+            }
+
         }
     };
 
