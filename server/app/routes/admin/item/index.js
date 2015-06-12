@@ -43,6 +43,7 @@ router.delete('/:item/:id', function (req, res, next) {
 });
 
 router.post('/:item', function (req, res, next) {
+    req.body.storeId = req.storeId;
     models[req.params.item].create(req.body).then(function (filling) {
         res.send(filling);
     }, function (err) {

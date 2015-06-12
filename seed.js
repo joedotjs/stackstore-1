@@ -25,34 +25,36 @@ var User = mongoose.model('User');
 var Shape = mongoose.model('Shape');
 var Icing = mongoose.model('Icing');
 var Filling = mongoose.model('Filling');
-var Layer = mongoose.model('Layer');
+var Store = mongoose.model('Store');
 var Review = mongoose.model('Review');
 var Cake = mongoose.model('Cake');
 var q = require('q');
 var chalk = require('chalk');
 
 
-var seedStores = function () {
+var randomize = function (arr) {
+	return Math.floor(Math.random() * arr.length);
+}
 
-    var users = [
-        {
+
+// STORES
+var getStoresData = function () {
+    return q.ninvoke(Store, 'find', {});
+};
+
+
+var seedStores = function (users) {
+
+    var stores = [{
             name: 'Main Store',
 			description: 'Main store description',
-			thumbnail: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200%C3%97150&w=200&h=150',
+			logo: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200%C3%97150&w=200&h=150',
 			address: '1111 Wall St New York, NY 22222',
 			phone: '1234567890',
-		    owner: {
-				type: mongoose.Schema.Types.ObjectId,
-				ref: 'User'
-			},
-			employees: [{
-				type: mongoose.Schema.Types.ObjectId,
-				ref: 'User'
-			}]
-        }
-    ];
+			owner: users[randomize(users)]._id
+    }];
 
-    return q.invoke(User, 'create', users);
+    return q.invoke(Store, 'create', stores);
 
 };
 
@@ -85,16 +87,19 @@ var getShapesData = function () {
     return q.ninvoke(Shape, 'find', {});
 };
 
-var seedShapes = function () {
+var seedShapes = function (stores) {
     var shapes = [{
         name: 'round',
-        description: 'round description'
+        description: 'round description',
+        storeId: stores[randomize(stores)]._id
     }, {
         name: 'square',
-        description: 'square description'
+        description: 'square description',
+        storeId: stores[randomize(stores)]._id
     }, {
         name: 'rectangle',
-        description: 'rectangle description'
+        description: 'rectangle description',
+        storeId: stores[randomize(stores)]._id
     }];
 
     return q.invoke(Shape, 'create', shapes)
@@ -106,20 +111,23 @@ var getFillingsData = function () {
     return q.ninvoke(Filling, 'find', {});
 };
 
-var seedFilling = function () {
+var seedFilling = function (stores) {
 
     var fillings = [{
         name: 'chocolate',
         description: 'chocolate description',
-        price: 20
+        price: 20,
+        storeId: stores[randomize(stores)]._id
     }, {
         name: 'vanilla',
         description: 'vanilla description',
-        price: 30
+        price: 30,
+        storeId: stores[randomize(stores)]._id
     }, {
         name: 'strawberry',
         description: 'strawberry description',
-        price: 40
+        price: 40,
+        storeId: stores[randomize(stores)]._id
     }];
 
     return q.invoke(Filling, 'create', fillings)
@@ -131,52 +139,26 @@ var getIcingsData = function () {
     return q.ninvoke(Icing, 'find', {});
 };
 
-var seedIcing = function () {
+var seedIcing = function (stores) {
 
     var icings = [{
         name: 'chocolate',
         description: 'chocolate description',
-        price: 5
+        price: 5,
+        storeId: stores[randomize(stores)]._id
     }, {
         name: 'vanilla',
         description: 'vanilla description',
-        price: 10
+        price: 10,
+        storeId: stores[randomize(stores)]._id
     }, {
         name: 'strawberry',
         description: 'strawberry description',
-        price: 15
+        price: 15,
+        storeId: stores[randomize(stores)]._id
     }];
 
     return q.invoke(Icing, 'create', icings)
-}
-
-
-//LAYERS
-var getLayersData = function () {
-    return q.ninvoke(Layer, 'find', {});
-};
-
-var seedLayers = function (fillings) {
-
-    var layers = [
-    {
-        position: 1,
-        filling: fillings[Math.floor(Math.random() * fillings.length)]._id,
-    },
-    {
-        position: 2,
-        filling: fillings[Math.floor(Math.random() * fillings.length)]._id,
-    },
-    {
-        position: 3,
-        filling: fillings[Math.floor(Math.random() * fillings.length)]._id,
-    },
-    {
-        position: 4,
-        filling: fillings[Math.floor(Math.random() * fillings.length)]._id,
-    }];
-
-    return q.invoke(Layer, 'create', layers)
 }
 
 
@@ -188,17 +170,17 @@ var getReviewsData = function () {
 var seedReviews = function (users) {
 
     var reviews = [{
-        user: users[Math.floor(Math.random() * users.length)]._id,
+        user: users[randomize(users)]._id,
         summary: 'top notch cake',
         description: 'description top notch cake',
         stars: 5
     }, {
-        user: users[Math.floor(Math.random() * users.length)]._id,
+        user: users[randomize(users)]._id,
         summary: 'horrib cake',
         description: 'description horrid cake',
         stars: 1
     }, {
-        user: users[Math.floor(Math.random() * users.length)]._id,
+        user: users[randomize(users)]._id,
         summary: 'kickass cake',
         description: 'description kickass cake',
         stars: 4
@@ -209,7 +191,7 @@ var seedReviews = function (users) {
 
 
 
-var seedCakes = function (shapes, icings, fillings, reviews, layers) {
+var seedCakes = function (shapes, icings, fillings, reviews, stores) {
 
     var prices = [30, 40, 50, 60, 70];
     var quantities = [5, 10, 15, 20];
@@ -220,136 +202,240 @@ var seedCakes = function (shapes, icings, fillings, reviews, layers) {
         {
             name: 'Stock Cake 1',
             type: 'stock', // custom or stock
-            shape: shapes[Math.floor(Math.random() * shapes.length)]._id,
-            icing: icings[Math.floor(Math.random() * icings.length)]._id,
-            layers: [
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id
-            ],
-            reviews: reviews[Math.floor(Math.random() * reviews.length)]._id
+            storeId: stores[randomize(stores)]._id,
+            shape: shapes[randomize(shapes)]._id,
+            icing: icings[randomize(icings)]._id,
+            layers: [{
+			        position: 1,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 2,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 3,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 4,
+			        filling: fillings[randomize(fillings)]._id
+		    }],
+            reviews: reviews[randomize(reviews)]._id
         },
         {
             name: 'Stock Cake 2',
             type: 'stock', // custom or stock
-            price: prices[Math.floor(Math.random() * shapes.length)],
-            shape: shapes[Math.floor(Math.random() * shapes.length)]._id,
-            icing: icings[Math.floor(Math.random() * icings.length)]._id,
-            layers: [
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id
-            ],
-            reviews: reviews[Math.floor(Math.random() * reviews.length)]._id,
-            quantity: quantities[Math.floor(Math.random() * quantities.length)]
+            storeId: stores[randomize(stores)]._id,
+            price: prices[randomize(prices)],
+            shape: shapes[randomize(shapes)]._id,
+            icing: icings[randomize(icings)]._id,
+            layers: [{
+			        position: 1,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 2,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 3,
+			        filling: fillings[randomize(fillings)]._id
+		    }],
+            reviews: reviews[randomize(reviews)]._id,
+            quantity: quantities[randomize(quantities)]
         },
         {
             name: 'Stock Cake 3',
             type: 'stock', // custom or stock
-            price: prices[Math.floor(Math.random() * shapes.length)],
-            shape: shapes[Math.floor(Math.random() * shapes.length)]._id,
-            icing: icings[Math.floor(Math.random() * icings.length)]._id,
-            layers: [
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id
-            ],
-            reviews: reviews[Math.floor(Math.random() * reviews.length)]._id,
-            quantity: quantities[Math.floor(Math.random() * quantities.length)]
+            storeId: stores[randomize(stores)]._id,
+            price: prices[randomize(prices)],
+            shape: shapes[randomize(shapes)]._id,
+            icing: icings[randomize(icings)]._id,
+            layers: [{
+			        position: 1,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 2,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 3,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 4,
+			        filling: fillings[randomize(fillings)]._id
+		    }],
+            reviews: reviews[randomize(reviews)]._id,
+            quantity: quantities[randomize(quantities)]
         },
         {
             name: 'Stock Cake 4',
             type: 'stock', // custom or stock
-            price: prices[Math.floor(Math.random() * shapes.length)],
-            shape: shapes[Math.floor(Math.random() * shapes.length)]._id,
-            icing: icings[Math.floor(Math.random() * icings.length)]._id,
-            layers: [
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id
-            ],
-            reviews: reviews[Math.floor(Math.random() * reviews.length)]._id,
-            quantity: quantities[Math.floor(Math.random() * quantities.length)]
+            storeId: stores[randomize(stores)]._id,
+            price: prices[randomize(prices)],
+            shape: shapes[randomize(shapes)]._id,
+            icing: icings[randomize(icings)]._id,
+            layers: [{
+			        position: 1,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 2,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 3,
+			        filling: fillings[randomize(fillings)]._id
+		    }],
+            reviews: reviews[randomize(reviews)]._id,
+            quantity: quantities[randomize(quantities)]
         },
         {
             name: 'Stock Cake 5',
             type: 'stock', // custom or stock
-            price: prices[Math.floor(Math.random() * shapes.length)],
-            shape: shapes[Math.floor(Math.random() * shapes.length)]._id,
-            icing: icings[Math.floor(Math.random() * icings.length)]._id,
-            layers: [
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id
-            ],
-            reviews: reviews[Math.floor(Math.random() * reviews.length)]._id,
-            quantity: quantities[Math.floor(Math.random() * quantities.length)]
+            storeId: stores[randomize(stores)]._id,
+            price: prices[randomize(prices)],
+            shape: shapes[randomize(shapes)]._id,
+            icing: icings[randomize(icings)]._id,
+            layers: [{
+			        position: 1,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 2,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 3,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 4,
+			        filling: fillings[randomize(fillings)]._id
+		    }],
+            reviews: reviews[randomize(reviews)]._id,
+            quantity: quantities[randomize(quantities)]
         },
         {
             name: 'Stock Cake 6',
             type: 'stock', // custom or stock
-            price: prices[Math.floor(Math.random() * shapes.length)],
-            shape: shapes[Math.floor(Math.random() * shapes.length)]._id,
-            icing: icings[Math.floor(Math.random() * icings.length)]._id,
-            layers: [
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id
-            ],
-            reviews: reviews[Math.floor(Math.random() * reviews.length)]._id,
-            quantity: quantities[Math.floor(Math.random() * quantities.length)]
+            storeId: stores[randomize(stores)]._id,
+            price: prices[randomize(prices)],
+            shape: shapes[randomize(shapes)]._id,
+            icing: icings[randomize(icings)]._id,
+            layers: [{
+			        position: 1,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 2,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 3,
+			        filling: fillings[randomize(fillings)]._id
+		    }],
+            reviews: reviews[randomize(reviews)]._id,
+            quantity: quantities[randomize(quantities)]
         },
         {
             name: 'Stock Cake 7',
             type: 'stock', // custom or stock
-            price: prices[Math.floor(Math.random() * shapes.length)],
-            shape: shapes[Math.floor(Math.random() * shapes.length)]._id,
-            icing: icings[Math.floor(Math.random() * icings.length)]._id,
-            layers: [
-                layers[Math.floor(Math.random() * layers.length)]._id
-            ],
-            reviews: reviews[Math.floor(Math.random() * reviews.length)]._id,
-            quantity: quantities[Math.floor(Math.random() * quantities.length)]
+            storeId: stores[randomize(stores)]._id,
+            price: prices[randomize(prices)],
+            shape: shapes[randomize(shapes)]._id,
+            icing: icings[randomize(icings)]._id,
+            layers: [{
+			        position: 1,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 2,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 3,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 4,
+			        filling: fillings[randomize(fillings)]._id
+		    }],
+            reviews: reviews[randomize(reviews)]._id,
+            quantity: quantities[randomize(quantities)]
         },
         {
             name: 'Stock Cake 8',
             type: 'stock', // custom or stock
-            price: prices[Math.floor(Math.random() * shapes.length)],
-            shape: shapes[Math.floor(Math.random() * shapes.length)]._id,
-            icing: icings[Math.floor(Math.random() * icings.length)]._id,
-            layers: [
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id
-            ],
-            reviews: reviews[Math.floor(Math.random() * reviews.length)]._id,
-            quantity: quantities[Math.floor(Math.random() * quantities.length)]
+            storeId: stores[randomize(stores)]._id,
+            price: prices[randomize(prices)],
+            shape: shapes[randomize(shapes)]._id,
+            icing: icings[randomize(icings)]._id,
+            layers: [{
+			        position: 1,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 2,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 3,
+			        filling: fillings[randomize(fillings)]._id
+		    }],
+            reviews: reviews[randomize(reviews)]._id,
+            quantity: quantities[randomize(quantities)]
         },
         {
             name: 'Stock Cake 9',
             type: 'stock', // custom or stock
-            price: prices[Math.floor(Math.random() * shapes.length)],
-            shape: shapes[Math.floor(Math.random() * shapes.length)]._id,
-            icing: icings[Math.floor(Math.random() * icings.length)]._id,
-            layers: [
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id
-            ],
-            reviews: reviews[Math.floor(Math.random() * reviews.length)]._id,
-            quantity: quantities[Math.floor(Math.random() * quantities.length)]
+            storeId: stores[randomize(stores)]._id,
+            price: prices[randomize(prices)],
+            shape: shapes[randomize(shapes)]._id,
+            icing: icings[randomize(icings)]._id,
+            layers: [{
+			        position: 1,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 2,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 3,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 4,
+			        filling: fillings[randomize(fillings)]._id
+		    }],
+            reviews: reviews[randomize(reviews)]._id,
+            quantity: quantities[randomize(quantities)]
         },
         {
             name: 'Stock Cake 10',
             type: 'stock', // custom or stock
-            price: prices[Math.floor(Math.random() * shapes.length)],
-            shape: shapes[Math.floor(Math.random() * shapes.length)]._id,
-            icing: icings[Math.floor(Math.random() * icings.length)]._id,
-            layers: [
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id,
-                layers[Math.floor(Math.random() * layers.length)]._id
-            ],
-            reviews: reviews[Math.floor(Math.random() * reviews.length)]._id,
-            quantity: quantities[Math.floor(Math.random() * quantities.length)]
+            storeId: stores[randomize(stores)]._id,
+            price: prices[randomize(prices)],
+            shape: shapes[randomize(shapes)]._id,
+            icing: icings[randomize(icings)]._id,
+            layers: [{
+			        position: 1,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 2,
+			        filling: fillings[randomize(fillings)]._id
+			    },
+			    {
+			        position: 3,
+			        filling: fillings[randomize(fillings)]._id
+		    }],
+            reviews: reviews[randomize(reviews)]._id,
+            quantity: quantities[randomize(quantities)]
         }
 
     ];
@@ -372,39 +458,38 @@ connectToDb.then(function () {
     }).then(function (users) {
         return seedReviews(users);
     }).then(function () {
-        return q.ninvoke(Shape, 'find', {});
-    }).then(function (shapes) {
+        return q.ninvoke(User, 'find', {});
+    }).then(function (users) {
+        return seedStores(users);
+    }).then(function () {
+    	return q.all([getShapesData(), getStoresData()]);
+    }).spread(function (shapes, stores) {
         if (shapes.length === 0) {
-            return seedShapes();
+            return seedShapes(stores);
         } else {
             console.log(chalk.magenta('Seems to already be shape data, exiting!'));
         }
     }).then(function () {
-        return q.ninvoke(Filling, 'find', {});
-    }).then(function (filling) {
+    	return q.all([getFillingsData(), getStoresData()]);
+    }).spread(function (filling, stores) {
         if (filling.length === 0) {
-            return seedFilling();
+            return seedFilling(stores);
         } else {
             console.log(chalk.magenta('Seems to already be filling data, exiting!'));
         }
     }).then(function () {
-        return q.ninvoke(Filling, 'find', {});
-    }).then(function (fillings) {
-        return seedLayers(fillings);
-    }).then(function () {
-        return q.ninvoke(Icing, 'find', {});
-    }).then(function (icings) {
+    	return q.all([getIcingsData(), getStoresData()]);
+    }).spread(function (icings, stores) {
         if (icings.length === 0) {
-            return seedIcing();
+            return seedIcing(stores);
         } else {
             console.log(chalk.magenta('Seems to already be icing data, exiting!'));
         }
     }).then(function () {
-        return q.all([getShapesData(), getIcingsData(), getFillingsData(), getReviewsData(), getLayersData()]);
+        return q.all([getShapesData(), getIcingsData(), getFillingsData(), getReviewsData(), getStoresData()]);
     })
-    .spread(function (shapes, icings, fillings, reviews, layers) {
-        // console.log('values', shapes, icings, fillings, layers, reviews);
-        return seedCakes(shapes, icings, fillings, reviews, layers);
+    .spread(function (shapes, icings, fillings, reviews, stores) {
+        return seedCakes(shapes, icings, fillings, reviews, stores);
     })
     .then(function () {
         console.log(chalk.green('Seed successful!'));
