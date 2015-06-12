@@ -32,6 +32,30 @@ var q = require('q');
 var chalk = require('chalk');
 
 
+var seedStores = function () {
+
+    var users = [
+        {
+            name: 'Main Store',
+			description: 'Main store description',
+			thumbnail: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200%C3%97150&w=200&h=150',
+			address: '1111 Wall St New York, NY 22222',
+			phone: '1234567890',
+		    owner: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'User'
+			},
+			employees: [{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'User'
+			}]
+        }
+    ];
+
+    return q.invoke(User, 'create', users);
+
+};
+
 // USERS
 var getCurrentUserData = function () {
     return q.ninvoke(User, 'find', {});

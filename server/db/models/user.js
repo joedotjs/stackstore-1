@@ -29,7 +29,11 @@ var schema = new mongoose.Schema({
     admin: {
         type: Boolean,
         default: false
-    }
+    },
+    storeId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Store'
+	}
 });
 
 schema.plugin(textSearch);

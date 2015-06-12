@@ -6,6 +6,10 @@ var schema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
+	storeId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Store'
+	},
 	status: {
 		type: String,
 		default: 'Created'
