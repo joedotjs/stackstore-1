@@ -1,8 +1,8 @@
 app.factory('StoreFCT', function ($http) {
 
 
-    var getAll = function() {
-        return $http.get('/api/store/', function (data) {
+    var getAll = function(storeId) {
+        return $http.get(`/api/store/${storeId}`, function (data) {
             console.log('CAKE DATA', data);
             return data;
         });
@@ -44,13 +44,19 @@ app.factory('StoreFCT', function ($http) {
 
         for (var i = 0; i < $localStorage.cart.length; i++) {
             if ($localStorage.cart[i]._id === cake._id) {
-                $localStorage.cart.splice(i, 1)
+                $localStorage.cart.splice(i, 1);
             }
         }
     };
 
     var createNewStore = function (store) {
         return $http.post('/api/create/store', store, function (data){
+            return data;
+        });
+    }
+
+    var getAllStores = function() {
+        return $http.get('/api/store', function (data) {
             return data;
         });
     }
@@ -62,7 +68,10 @@ app.factory('StoreFCT', function ($http) {
         addToUnauthCart: addToUnauthCart,
         removeFromAuthCart: removeFromAuthCart,
         removeFromUnauthCart: removeFromUnauthCart,
-        createNewStore: createNewStore
+        createNewStore: createNewStore,
+
+
+        getAllStores: getAllStores
     };
 
 });

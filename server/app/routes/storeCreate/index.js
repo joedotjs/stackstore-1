@@ -3,6 +3,7 @@ module.exports = router;
 var body = require('body-parser');
 var mongoose = require('mongoose');
 var Promise = require('bluebird');
+var UserModel = mongoose.model('User');
 
 var StoreModel = mongoose.model('Store');
 var IcingModel = mongoose.model('Icing');
@@ -17,10 +18,12 @@ router.post('/store', function (req, res, next) {
     store.owner = req.user._id;
     //ADD MORE FOR ALL OTHER DATA POINTS
     store.save(function (err, store) {
-    	console.log()
-    	createDefaults(store._id).then(function (data){
-    		console.log('END of PROMISE', data);
-    		res.send(store);
+    	UserModel.findByIdAndUpdate(req.user._id, {$set: {storeId: store._id}})
+    		.exec().then(function (user) {
+
+	    	createDefaults(store._id).then(function (data){
+	    		res.send(store);
+	    	});
     	});
     });
 });
