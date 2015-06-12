@@ -9,33 +9,46 @@ var IcingModel = mongoose.model('Icing');
 var ShapeModel = mongoose.model('Shape');
 var FillingModel = mongoose.model('Filling');
 
-router.get('/store/new', function (req, res, next) {
+router.post('/store', function (req, res, next) {
 	var d = req.body;
     var store = new StoreModel();
     store.name = d.name;
     store.description = d.description;
     store.owner = req.user._id;
-    store.save().then(function (store) {
-
+    //ADD MORE FOR ALL OTHER DATA POINTS
+    store.save(function (err, store) {
+    	console.log()
+    	createDefaults(store._id).then(function (data){
+    		console.log('END of PROMISE', data);
+    		res.send(store);
+    	});
     });
 });
 
 
 var createDefaults = function(storeId) {
 	var shapeArr = [
-		{name: 'Round', description: 'Round Cake Shape Description'},
-		{name: 'Square', description: 'Square Cake Shape Description'},
-		{name: 'Rectangle', description: 'Rectangle Cake Shape Description'}];
+		{name: 'Round', description: 'Round Cake Shape Description', storeId: storeId },
+		{name: 'Square', description: 'Square Cake Shape Description', storeId: storeId },
+		{name: 'Rectangle', description: 'Rectangle Cake Shape Description', storeId: storeId }];
 
 	var fillingArr = [
-		{name: 'chocolate', description: 'chocolate description', price: 20},
-		{name: 'vanilla', description: 'vanilla description', price: 30 },
-		{name: 'strawberry', description: 'strawberry description', price: 40 }];
+		{name: 'Chocolate', description: 'Chocolate description', price: 20, storeId: storeId },
+		{name: 'Vanilla', description: 'Vanilla description', price: 30, storeId: storeId },
+		{name: 'Strawberry', description: 'Strawberry description', price: 40, storeId: storeId }];
 
     var icingArr = [
-    	{name: 'chocolate', description: 'chocolate description', price: 5 },
-    	{name: 'vanilla', description: 'vanilla description', price: 10 },
-    	{name: 'strawberry', description: 'strawberry description', price: 15 }];
+    	{name: 'Chocolate', description: 'Chocolate description', price: 5, storeId: storeId },
+    	{name: 'Vanilla', description: 'Vanilla description', price: 10, storeId: storeId },
+    	{name: 'Strawberry', description: 'Strawberry description', price: 15, storeId: storeId }];
 
-	ShapeModel.create({name: 'Round', description: 'Round Cake Shape Description'})
+    var seedData = function(model, array) {
+    	return model.create(array);
+    }
+
+    return Promise.all([
+    	seedData(ShapeModel, shapeArr),
+    	seedData(IcingModel, icingArr),
+    	seedData(FillingModel, fillingArr)]);
+
 }

@@ -1,27 +1,27 @@
 app.factory('AdminFCT', function ($http) {
 
-    var getAllCategory = function(category) {
+    var getAllCategory = function(storeId, category) {
         console.log('GETTING ALL')
-        return $http.get('/api/admin/category/'+category, function (data) {
+        return $http.get('/api/store/'+storeId+'/admin/category/'+category, function (data) {
             return data;
         });
     }
-    var postNewCategory = function(category, item) {
-        return $http.post('/api/admin/category/'+category, item, function (data) {
+    var postNewCategory = function(storeId, category, item) {
+        return $http.post('/api/store/'+storeId+'/admin/category/'+category, item, function (data) {
             return data; 
         });
     }
-    var postEditCategory = function(category, item) {
+    var postEditCategory = function(storeId, category, item) {
         var id = item._id;
         delete item.__v;
         // delete item._id;
         // delete item.reviews;
-        return $http.put('/api/admin/category/'+category+'/'+id, item, function (data) {
+        return $http.put('/api/store/'+storeId+'/admin/category/'+category+'/'+id, item, function (data) {
             return data; 
         });
     }
-    var deleteCategory = function(category, itemId) {
-        return $http.delete('/api/admin/category/'+category+'/'+itemId, function (data) {
+    var deleteCategory = function(storeId, category, itemId) {
+        return $http.delete('/api/store/'+storeId+'/admin/category/'+category+'/'+itemId, function (data) {
             return data; 
         });
     }
@@ -29,27 +29,27 @@ app.factory('AdminFCT', function ($http) {
 
 
 
-    var getAllCake = function() {
-        return $http.get('/api/admin/cake', function (data) {
+    var getAllCake = function(storeId) {
+        return $http.get('/api/store/'+storeId+'/admin/cake', function (data) {
             return data;
         });
     }
-    var postNewCake = function(item) {
-        return $http.post('/api/admin/cake/create', item, function (data) {
+    var postNewCake = function(storeId, item) {
+        return $http.post('/api/store/'+storeId+'/admin/cake/create', item, function (data) {
             return data; 
         });
     }
-    var postEditCake = function(item) {
+    var postEditCake = function(storeId, item) {
         var id = item._id;
         delete item.__v;
         // delete item._id;
         // delete item.reviews;
-        return $http.post('/api/admin/cake/'+id, item, function (data) {
+        return $http.put('/api/store/'+storeId+'/admin/cake/'+id, item, function (data) {
             return data; 
         });
     }
-    var deleteCake = function(cakeId) {
-        return $http.get('/api/admin/cake/delete/'+cakeId, function (data) {
+    var deleteCake = function(storeId, cakeId) {
+        return $http.delete('/api/store/'+storeId+'/admin/cake/delete/'+cakeId, function (data) {
             return data; 
         });
     }   
@@ -58,20 +58,20 @@ app.factory('AdminFCT', function ($http) {
 
 
 
-    var getAdminUsers = function() {
-        return $http.get('/api/admin/users', function (data) {
+    var getAdminUsers = function(storeId) {
+        return $http.get('/api/store/'+storeId+'/admin/users', function (data) {
             return data;
         });
     }
 
-    var removeAdminStatus = function(userId) {
-        return $http.put('/api/admin/users/'+userId, {admin: false},function (data) {
+    var removeAdminStatus = function(storeId, userId) {
+        return $http.put('/api/store/'+storeId+'/admin/users/'+userId, {admin: false},function (data) {
             return data;
         });
     }
 
-    var searchNonAdminUser = function(userId) {
-        return $http.post('/api/admin/users/search', {blah:'blah'}, function (data) {
+    var searchNonAdminUser = function(storeId, userId) {
+        return $http.post('/api/store/'+storeId+'/admin/users/search', {blah:'blah'}, function (data) {
             return data;
         });
     }

@@ -44,10 +44,12 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('AdminCtrl', function ($scope, $state, AdminFCT) {
-    //nothing here yet
+app.controller('AdminCtrl', function ($scope, $state, AdminFCT, $stateParams) {
+    $scope.storeId = $stateParams.storeId;
+    console.log('Id', $scope.storeId);
 });
 app.controller('AdminUsersCtrl', function ($scope, $state, AdminFCT, AuthService, $stateParams) {
+    $scope.storeId = $stateParams.storeId;
     AuthService.getLoggedInUser($stateParams.storeId).then(function (user){
         $scope.theUser = user;
     });
@@ -93,6 +95,7 @@ app.controller('AdminOrderCtrl', function ($scope, AdminFCT) {
 });
 
 app.controller('AdminCakeCtrl', function ($scope, $state, AdminFCT, $stateParams) {
+    $scope.storeId = $stateParams.storeId;
     AdminFCT.getAllCake($stateParams.storeId).then(function (data) {
         $scope.icingList = data.data[0];
         $scope.fillingList = data.data[1];

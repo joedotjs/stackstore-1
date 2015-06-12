@@ -16,7 +16,7 @@ var models = {
     shape: ShapeModel }
 
 router.get('/:item', function (req, res, next) {
-    models[req.params.item].find().exec().then(function (fillingArr) {
+    models[req.params.item].find({storeId: req.storeId}).exec().then(function (fillingArr) {
         res.send(fillingArr);
     }, function (err) {
         return next(err);

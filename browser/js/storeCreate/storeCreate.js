@@ -9,8 +9,15 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('StoreCreateCtrl', function ($scope, $state, StoreFCT, $stateParams, $localStorage) {
+app.controller('StoreCreateCtrl', function ($scope, $state, StoreFCT, $stateParams, $rootScope) {
 
+    $scope.saveStore = function (store) {
+        StoreFCT.createNewStore(store).then(function (data) {
+            $rootScope.storeId = data.data._id;
+            console.log('storeId', $rootScope.storeId);
+            $state.go('adminHome', { storeId : data.data._id });
+        });
+    }
     // var cartData = [];
 
     // StoreFCT.getOne($stateParams.id)

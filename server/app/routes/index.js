@@ -7,7 +7,8 @@ router.param('storeId', function (req, res, next) {
 	return next();
 })
 
-router.use('/tutorial', require('./tutorial'));
+// router.use('/tutorial', require('./tutorial'));
+router.use('/create', require('./storeCreate'));
 router.use('/members', require('./members'));
 router.use('/store', require('./store'));
 router.use('/cake_builder', require('./cake_builder'));
