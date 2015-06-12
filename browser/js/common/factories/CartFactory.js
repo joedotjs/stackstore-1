@@ -25,6 +25,13 @@ app.factory('CartFactory', function ($http) {
                 // return test;
             });	
         }
+        calculateCart: function(cart){
+            var cartPrice = 0;
+            cart.forEach(function(cake){
+                cartPrice += cake.price;
+            })
+            return cartPrice;
+        }
     };
 
 });
