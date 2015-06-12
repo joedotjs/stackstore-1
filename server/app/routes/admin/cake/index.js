@@ -14,16 +14,16 @@ var FillingModel = mongoose.model('Filling');
 var ShapeModel = mongoose.model('Shape');
 
 
-var getAll = function(model) {
-    return model.find().exec();
+var getAll = function(storeId, model) {
+    return model.find({storeId: storeId}).exec();
 }
 
 
 router.get('/', function (req, res, next) {
-    Promise.all([getAll(IcingModel),
-                getAll(FillingModel),
-                getAll(ShapeModel),
-                CakeModel.find({type: 'stock'})
+    Promise.all([getAll(req.storeId, IcingModel),
+                getAll(req.storeId, FillingModel),
+                getAll(req.storeId, ShapeModel),
+                CakeModel.find({type: 'stock', storeId: req.storeId})
                     .populate('shape icing layers')
                     .deepPopulate('layers.filling')
                     .exec()

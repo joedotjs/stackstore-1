@@ -49,13 +49,20 @@ app.factory('StoreFCT', function ($http) {
         }
     };
 
+    var createNewStore = function (store) {
+        return $http.post('/api/create/store', store, function (data){
+            return data;
+        });
+    }
+
     return {
         getAll: getAll,
         getOne: getOne,
         addToAuthCart: addToAuthCart,
         addToUnauthCart: addToUnauthCart,
         removeFromAuthCart: removeFromAuthCart,
-        removeFromUnauthCart: removeFromUnauthCart
+        removeFromUnauthCart: removeFromUnauthCart,
+        createNewStore: createNewStore
     };
 
 });

@@ -5,31 +5,31 @@ var textSearch = require('mongoose-text-search');
 
 
 var schema = new mongoose.Schema({
-    email: {
-        type: String
-    },
-    password: {
-        type: String
-    },
-    salt: {
-        type: String
-    },
+
+    email: { type: String },
+
+    password: { type: String },
+
+    salt: { type: String },
+
     twitter: {
         id: String,
         username: String,
         token: String,
         tokenSecret: String
     },
-    facebook: {
-        id: String
-    },
-    google: {
-        id: String
-    },
-    admin: {
-        type: Boolean,
-        default: false
-    }
+
+    facebook: { id: String },
+
+    google: { id: String },
+
+    admin: { type: Boolean, default: false },
+
+    storeId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Store'
+	}
+
 });
 
 schema.plugin(textSearch);
