@@ -4,6 +4,10 @@ var deepPopulate = require('mongoose-deep-populate');
 var schema = new mongoose.Schema({
 	name: String,
 	type: String, // custom or stock
+	storeId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Store'
+	},
 	quantity: {
 		type: Number,
 		default: 1 // if cake is custom, dont show
