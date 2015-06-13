@@ -7,7 +7,7 @@ var schema = new mongoose.Schema({
 
 	description: String,
 
-	type: { type: String, required: true },
+	type: { type: String, required: true, enum: cakeTypes },
 
 	storeId: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -52,6 +52,11 @@ var schema = new mongoose.Schema({
 	}]
 	
 });
+
+var cakeTypes = {
+	values: 'stock custom'.split(' '),
+	message: 'Validation failed. Must be either "stock" or "custom"'
+}
 
 schema.plugin(deepPopulate, {
 	populate: {

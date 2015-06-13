@@ -23,10 +23,6 @@ app.run(function ($rootScope, AuthService, $state) {
     // $stateChangeStart is an event fired
     // whenever the process of changing a state begins.
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
-        // console.log('DEST STATE AUTH', destinationStateRequiresAuth(toState))
-        // console.log('DEST STATE ADMIN AUTH', destinationStateRequiresAdminAuth(toState))
-        // console.log('IS AUTH', AuthService.isAuthenticated())
-        // console.log('IS ADMIN AUTH', AuthService.isAdminAuthenticated())
 
         if (!destinationStateRequiresAuth(toState) && !destinationStateRequiresAdminAuth(toState)) {
             // The destination state does not require authentication

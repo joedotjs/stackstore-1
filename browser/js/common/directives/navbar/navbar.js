@@ -12,11 +12,18 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) 
                 { label: 'About', state: 'about' },
                 { label: 'Store', state: 'store' },
                 // { label: 'Tutorial', state: 'tutorial' },
-                { label: 'Admin', state: 'adminHome', adminAuth: true },
-                { label: 'Create A Store', state: 'storeCreate', auth: true },
+                { label: 'Admin', state: 'adminHome({storeId : user.storeId})', adminAuth: true },
                 // { label: 'Members Only', state: 'membersOnly', auth: true },
                 { label: 'Cart', state: 'cart'}
             ];
+
+            AuthService.getLoggedInUser().then(function (user) {
+                console.log(user);
+                if(!user.storeId) {
+                    scope.items.push({ label: 'Create A Store', state: 'storeCreate', auth: true });
+                }
+            });
+
 
             scope.user = null;
 

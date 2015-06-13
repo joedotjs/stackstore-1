@@ -1,7 +1,6 @@
 app.factory('AdminFCT', function ($http) {
 
     var getAllCategory = function(storeId, category) {
-        console.log('GETTING ALL')
         return $http.get('/api/store/'+storeId+'/admin/category/'+category, function (data) {
             return data;
         });
@@ -70,8 +69,23 @@ app.factory('AdminFCT', function ($http) {
         });
     }
 
-    var searchNonAdminUser = function(storeId, userId) {
-        return $http.post('/api/store/'+storeId+'/admin/users/search', {blah:'blah'}, function (data) {
+    var searchNonAdminUser = function(storeId, email) {
+        return $http.post('/api/store/'+storeId+'/admin/users/search', {email: email}, function (data) {
+            return data;
+        });
+    }
+
+    var makeAdminUser = function(storeId, userId) {
+        return $http.put('/api/store/'+storeId+'/admin/users/employ', {id: userId}, function (data) {
+            return data;
+        });
+    }
+
+
+
+
+    var getStoreInfo = function(storeId) {
+        return $http.get('/api/store/'+storeId, function (data) {
             return data;
         });
     }
@@ -90,7 +104,10 @@ app.factory('AdminFCT', function ($http) {
 
         getAdminUsers: getAdminUsers,
         removeAdminStatus: removeAdminStatus,
-        searchNonAdminUser: searchNonAdminUser
+        searchNonAdminUser: searchNonAdminUser,
+        makeAdminUser: makeAdminUser,
+
+        getStoreInfo: getStoreInfo
     };
 
 });

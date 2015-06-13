@@ -6,7 +6,7 @@ var textSearch = require('mongoose-text-search');
 
 var schema = new mongoose.Schema({
 
-    email: { type: String },
+    email: { type: String, unique: true },
 
     password: { type: String },
 

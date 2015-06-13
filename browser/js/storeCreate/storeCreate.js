@@ -9,7 +9,11 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('StoreCreateCtrl', function ($scope, $state, StoreFCT, $stateParams, $rootScope) {
+app.controller('StoreCreateCtrl', function ($scope, $state, StoreFCT, $stateParams, $rootScope, AuthService) {
+
+    AuthService.getLoggedInUser().then(function (user) {
+        if(user.storeId) $state.go('adminHome', { storeId : user.storeId });
+    });
 
     $scope.saveStore = function (store) {
         StoreFCT.createNewStore(store).then(function (data) {

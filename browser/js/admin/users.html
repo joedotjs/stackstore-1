@@ -8,6 +8,17 @@
 		<button ng-show="theUser._id !== user._id" ng-click="removeAdminStatus(user._id)">Remove Admin Status</button>
 	</div>
 
+	<br/>
+	<br/>
+	<button ng-show="!searchInput" ng-click="searchNonAdminUser()">Search User</button>
 
-	<button ng-click="searchNonAdminUser()">Search User</button>
+	<form name="searchUserForm" ng-show="searchInput" ng-submit="searchUserForm.$valid && searchUser(email)">
+		<input type="text" ng-model="email" name="email">
+		<input type="submit" value="Search">
+	</form>
+
+	<div ng-repeat="user in searchReturn">
+		<h1>{{user.email}}</h1>
+		<button ng-click="makeAdmin(user._id)">Make Admin</button>
+	</div>
 </div>

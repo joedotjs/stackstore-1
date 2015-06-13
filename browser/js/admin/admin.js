@@ -45,11 +45,20 @@ app.config(function ($stateProvider) {
 });
 
 app.controller('AdminCtrl', function ($scope, $state, AdminFCT, $stateParams) {
+    AdminFCT.getStoreInfo($stateParams.storeId).then(function (data) {
+        $scope.storeName = data.data.name;
+        console.log('DATA', data);
+    });
+
     $scope.storeId = $stateParams.storeId;
-    console.log('Id', $scope.storeId);
 });
+
+
+
+
 app.controller('AdminUsersCtrl', function ($scope, $state, AdminFCT, AuthService, $stateParams) {
     $scope.storeId = $stateParams.storeId;
+    $scope.searchInput = false;
     AuthService.getLoggedInUser($stateParams.storeId).then(function (user){
         $scope.theUser = user;
     });
@@ -67,8 +76,21 @@ app.controller('AdminUsersCtrl', function ($scope, $state, AdminFCT, AuthService
     }
 
     $scope.searchNonAdminUser = function () {
-        AdminFCT.searchNonAdminUser($stateParams.storeId).then(function (data) {
-            console.log('DATA', data);
+        $scope.searchInput = true;
+        $scope.searchReturn = [];
+    }
+
+    $scope.searchUser = function (email) {
+        AdminFCT.searchNonAdminUser($stateParams.storeId, email).then(function (data) {
+            $scope.searchReturn = data.data;
+        });
+    }
+
+    $scope.makeAdmin = function (userId) {
+        AdminFCT.makeAdminUser($stateParams.storeId, userId).then(function (data) {
+            $scope.searchReturn = [];
+            $scope.searchInput = false;
+            $scope.userList.push(data.data);
         });
     }
 
