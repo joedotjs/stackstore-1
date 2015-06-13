@@ -10,7 +10,7 @@ var Cart = mongoose.model('Cart');
 
 router.get('/:id', function (req, res, next) {
 
-    Cart.find({ user : req.params.id }, function (err, cart) {
+    Cart.findOne({ user : req.params.id }, function (err, cart) {
         if(err) next(err);
         res.send(cart);
     });

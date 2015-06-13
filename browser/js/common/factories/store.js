@@ -14,7 +14,7 @@ app.factory('StoreFCT', function ($http) {
             return data;
         });
     };
-
+    
     var addToAuthCart = function (user, cake, CartFactory) {
         
         CartFactory.updateCart(cake, user);
