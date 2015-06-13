@@ -1,4 +1,4 @@
-app.factory('CakeFactory', function ($http, $localStorage, CartFactory) {
+app.factory('CakeFactory', function ($http, $localStorage, CartFactory, AuthService, $state) {
 
     return {
         getAllIngredients: function (storeId) {
@@ -10,16 +10,26 @@ app.factory('CakeFactory', function ($http, $localStorage, CartFactory) {
         },
         storeCake: function (cakeObj, storeId){
 
-            return $http.post('/api/store/'+storeId+'/cake_builder', cakeObj).then(function(cake){
+            
+            if (AuthService.isAuthenticated()) {
+                return $http.post('/api/store/'+storeId+'/cake_builder', cakeObj).then(function(cake){
 
-        		console.log("cake returned after save",cake)
-                CartFactory.addToCart(cake)
+            		console.log("cake returned after save",cake)
+                    CartFactory.addToCart(cake)
 
-                delete $localStorage.cake
-        		delete $localStorage.currentPrices
+                    delete $localStorage.cake
+            		delete $localStorage.currentPrices
 
-        		return cake
-        	});
+            		return cake
+            	});
+            }
+            else
+            {
+                console.log(cakeObj)
+                CartFactory.addToCart(cakeObj)
+                $state.go("signup")
+
+            }
         }
 
     };

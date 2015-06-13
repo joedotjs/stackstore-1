@@ -1,4 +1,4 @@
-app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, CartFactory) {
+app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, $state, CartFactory) {
 
     return {
         restrict: 'E',
@@ -75,6 +75,7 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, C
                     //to update cake object properties
                     scope.update = function(propName, propObj, layerNum){
 
+                        
                         //set scope.cake property
                         if(propName === "selectedNumLayers"){
                             scope.cake.selectedNumLayers = propObj
@@ -83,6 +84,10 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, C
 
                         //set properties on cake object and cake pricing object
                         
+                        if(propName === "quantity"){
+                            scope.currentPrices[propName] = scope.cake.quantity
+                        }
+
                         if(propName === "shape" || propName === "icing"){
                             
                             scope.cake[propName] = propObj._id
@@ -155,7 +160,10 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, C
                         //regenerate prices when we change the cake
                         scope.updatePrice = function(){
                             scope.cake.price = 0;
-                            console.log("setting prices: price tracker", scope.currentPrices)
+                            // console.log("setting prices: price tracker", scope.currentPrices)
+                            if(scope.currentPrices.icing){
+                                scope.cake.price += scope.currentPrices.icing.price;
+                            }
                             if(scope.currentPrices.icing){
                                 scope.cake.price += scope.currentPrices.icing.price;
                             }
@@ -167,6 +175,9 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, C
                             }
                             if(scope.currentPrices.layers[2].filling !== null){
                                 scope.cake.price += scope.currentPrices.layers[2].filling.price
+                            }
+                            if(scope.currentPrices.quantity){
+                                scope.cake.price *= parseInt(scope.currentPrices.quantity)
                             }
                             console.log("cake", scope.cake)    
 
@@ -182,8 +193,13 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, C
                     scope.storeId = $stateParams.storeId
                     
                     // //bring storeCake function to scope
-                    // scope.storeCake = CakeFactory.storeCake
                     scope.storeCake = CakeFactory.storeCake
+                    // scope.storeCake = function(){
+                    //     CakeFactory.storeCake()
+
+                    //     // $state.go("signup");
+
+                    // }
 
                     //persist cake in progress from local storage
                     scope.loadCakeFromLocal = function (){
