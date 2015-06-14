@@ -1,6 +1,7 @@
 <h1>STORE SINGLE</h1>
 
 <div ng-repeat="cake in products track by $index" class="storeItem">
+    {{cake}}
     <h5>Shape: {{ cake.shape.name }}</h5>
     <h5>Icing: {{ cake.icing.name }}</h5>
     <h5>Layers: {{ cake.layerNum }}</h5>

@@ -21,24 +21,21 @@ app.factory('CakeFactory', function ($http, $localStorage, CartFactory, AuthServ
         },
         storeCake: function (cakeObj, storeId){
 
-            
+            delete $localStorage.cake
+            delete $localStorage.currentPrices
+
             if (AuthService.isAuthenticated()) {
                 return $http.post('/api/store/'+storeId+'/cake_builder', cakeObj).then(function(cake){
 
             		console.log("cake returned after save",cake)
                     CartFactory.addToCart(cake)
-
-                    delete $localStorage.cake
-            		delete $localStorage.currentPrices
-
             		return cake
+
             	});
             }
             else
             {
-                console.log(cakeObj)
                 CartFactory.addToCart(cakeObj)
-                
 
             }
         }

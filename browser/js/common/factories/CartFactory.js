@@ -1,5 +1,5 @@
 
-app.factory('CartFactory', function ($http, AuthService, StoreFCT, $localStorage) {
+app.factory('CartFactory', function ($http, AuthService, StoreFCT, $localStorage, $state) {
 
     return {
     	getCartByUser: function (user) {
@@ -36,6 +36,8 @@ app.factory('CartFactory', function ($http, AuthService, StoreFCT, $localStorage
         addToCart: function (cake) {
 
             console.log("add to cart received cake", cake)
+
+            $state.go("signup")
 
             if (AuthService.isAuthenticated()) {
 

@@ -21,6 +21,7 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, $
 
                         name: null,
                         type: "custom",
+                        storeId: null,
                         price: 0,
                         shape: null,
                         icing: null,
@@ -35,6 +36,7 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, $
                         $localStorage.cake = {
                             name: null,
                             type: "custom",
+                            storeId: null,
                             price: 0,
                             shape: null,
                             icing: null,
@@ -67,6 +69,13 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, $
                             ]
                         }
                     }
+
+                    //bring storeId to scope and place on cake
+                    
+                    console.log("this should be the store Id", $stateParams.storeId)
+                    scope.storeId = $stateParams.storeId
+                    scope.cake.storeId = $stateParams.storeId
+                    $localStorage.cake.storeId = $stateParams.storeId
 
                     //store cost of last selected item to subtract from price upon replacement
                     // scope.cake.previousIcingPrice = 0 ;
@@ -189,8 +198,7 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, $
                     scope.selectedNumLayers = "selectedNumLayers"
                     scope.numLayers = [1,2,3]
                     
-                    //bring storeId to scope
-                    scope.storeId = $stateParams.storeId
+
                     
                     // //bring storeCake function to scope
                     scope.storeCake = CakeFactory.storeCake
