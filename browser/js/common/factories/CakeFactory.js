@@ -1,6 +1,7 @@
-app.factory('CakeFactory', function ($http, $localStorage, CartFactory) {
+app.factory('CakeFactory', function ($http, $localStorage, CartFactory, AuthService, $state) {
 
     return {
+
     	getCakes: function (cakeid) {
     		if (cakeid) {
     			return $http.get('/api/cake/' + cakeid).then(function(response){
@@ -10,29 +11,38 @@ app.factory('CakeFactory', function ($http, $localStorage, CartFactory) {
     		}
             
         },
-        getAllIngredients: function () {
-            return $http.get('/api/cake_builder').then(function(ingredients){
-                // console.log("get ingredients hit from front end")
+
+        getAllIngredients: function (storeId) {
+            return $http.get('/api/store/'+storeId+'/cake_builder').then(function(ingredients){
+                console.log("get ingredients hit from front end", ingredients)
+                
                 return ingredients
             });
         },
-        storeCake: function (cakeObj){
-        	return $http.post('/api/cake_builder', cakeObj).then(function(cake){
-        		// console.log("cake sent to database");
-        		// console.log(cake)
-        		delete $localStorage.cake
-        		delete $localStorage.currentPrices
-        		return cake
-        	});
+        storeCake: function (cakeObj, storeId){
+
+            
+            if (AuthService.isAuthenticated()) {
+                return $http.post('/api/store/'+storeId+'/cake_builder', cakeObj).then(function(cake){
+
+            		console.log("cake returned after save",cake)
+                    CartFactory.addToCart(cake)
+
+                    delete $localStorage.cake
+            		delete $localStorage.currentPrices
+
+            		return cake
+            	});
+            }
+            else
+            {
+                console.log(cakeObj)
+                CartFactory.addToCart(cakeObj)
+                $state.go("signup")
+
+            }
         }
-        // ,
-        // deleteCake: function (cakeName){
-        // 	console.log("hit the deleteCake", cakeName)
-        // 	return $http.delete('/api/cake_builder/'+cakeName).then(function(cake){
-        // 		console.log("cake delete complete on front end")
-        // 		return cake
-        // 	})
-        // }
+
     };
 
 });

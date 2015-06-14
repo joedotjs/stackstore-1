@@ -38,6 +38,10 @@
         {{currentPrices['layers'][2]['filling'].name}}
         <br>
         <br>
+        <p><b>Cake Quantity</b></p>
+        <p>{{cake.quantity}}</p>
+        <br>
+        <br>
         <p><b>Cake Price</b></p>
         <p>${{cake.price}}</p>
         <br>
@@ -66,7 +70,7 @@
     <br>
 
 
-    <form name="buildCakeForm" ng-submit="storeCake(cake)">
+    <form name="buildCakeForm" ng-submit="storeCake(cake, storeId)">
 
         <!-- check that cake.$valid is true && execute functions on submit above -->
         
@@ -81,7 +85,7 @@
         <select ng-model="cake.shape" ng-change="update('shape', cake.shape)" data-ng-options="shape as shape.name for shape in shapes">
             <option value="">Select Shape</option>
         </select>
-        {{currentPrices.shape.type}}
+        {{currentPrices.shape.name}}
         
         <br>
         <br>
@@ -127,11 +131,22 @@
         </div>
         <br>
         <br>
-        <button type="submit" >Build Cake!</button>
+    
+        <span>Input Quantity</span>
+        <error-message ng-show="cake.quantity.$touched && cake.quantity.$error.required">
+            Cake quantity is a required field.
+        </error-message>
+        <error-message ng-show="cake.quantity.$error.minlength">
+            Your cake name needs to be atleast 1 character long.
+        </error-message>
+        <input ng-model="cake.quantity" ng-change="update('quantity')" type="text" ng-minlength="1" required name="cakequantity"><br>
+        <br>
+        <br>
         <p><b>Cake Price</b></p>
         <p>${{cake.price}}</p>
         <br>
         <br>
+        <button type="submit" >Build Cake!</button>
     </form>
 </div>
         <!-- <button ng-click="deleteCake(cake.name)">Delete Cake</button> -->
