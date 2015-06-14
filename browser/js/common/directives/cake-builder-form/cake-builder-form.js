@@ -1,4 +1,4 @@
-app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, $state, CartFactory) {
+app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, $state, CartFactory, StoreSingleFCT) {
 
     return {
         restrict: 'E',
@@ -93,8 +93,8 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, $
 
                         //set properties on cake object and cake pricing object
                         
-                        if(propName === "quantity"){
-                            scope.currentPrices[propName] = scope.cake.quantity
+                        if(propName === "numOrdered"){
+                            scope.currentPrices[propName] = scope.cake.numOrdered
                         }
 
                         if(propName === "shape" || propName === "icing"){
@@ -168,11 +168,9 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, $
      
                         //regenerate prices when we change the cake
                         scope.updatePrice = function(){
+                           
                             scope.cake.price = 0;
-                            // console.log("setting prices: price tracker", scope.currentPrices)
-                            if(scope.currentPrices.icing){
-                                scope.cake.price += scope.currentPrices.icing.price;
-                            }
+
                             if(scope.currentPrices.icing){
                                 scope.cake.price += scope.currentPrices.icing.price;
                             }
@@ -185,8 +183,8 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, $
                             if(scope.currentPrices.layers[2].filling !== null){
                                 scope.cake.price += scope.currentPrices.layers[2].filling.price
                             }
-                            if(scope.currentPrices.quantity){
-                                scope.cake.price *= parseInt(scope.currentPrices.quantity)
+                            if(scope.currentPrices.numOrdered){
+                                scope.cake.price *= parseInt(scope.currentPrices.numOrdered)
                             }
                             console.log("cake", scope.cake)    
 
@@ -201,13 +199,14 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, $
 
                     
                     // //bring storeCake function to scope
-                    scope.storeCake = CakeFactory.storeCake
-                    // scope.storeCake = function(){
-                    //     CakeFactory.storeCake()
-
-                    //     // $state.go("signup");
-
-                    // }
+                    scope.storeCake = function(cake){
+                        
+                        delete $localStorage.cake
+                        delete $localStorage.currentPrices
+                        StoreSingleFCT.addToCart(cake)
+                    
+                    }
+    
 
                     //persist cake in progress from local storage
                     scope.loadCakeFromLocal = function (){

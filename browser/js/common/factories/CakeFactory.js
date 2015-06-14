@@ -18,14 +18,20 @@ app.factory('CakeFactory', function ($http, $localStorage, CartFactory, AuthServ
                 
                 return ingredients
             });
-        },
-        storeCake: function (cakeObj, storeId){
+        }
+        ,
+        storeCake: function (cakeObj){
 
             delete $localStorage.cake
             delete $localStorage.currentPrices
 
+            console.log("cake before remove numOrdered",cakeObj)
+            var numOrdered = cakeObj.numOrdered
+            delete cakeObj.numOrdered
+            console.log("cake after remove numOrdered",cakeObj)
+
             if (AuthService.isAuthenticated()) {
-                return $http.post('/api/store/'+storeId+'/cake_builder', cakeObj).then(function(cake){
+                return $http.post('/api/store/'+cakeObj.storeId+'/cake_builder', cakeObj).then(function(cake){
 
             		console.log("cake returned after save",cake)
                     CartFactory.addToCart(cake)

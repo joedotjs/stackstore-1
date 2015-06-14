@@ -28,48 +28,50 @@ app.factory('CartFactory', function ($http, AuthService, StoreFCT, $localStorage
         },
         calculateCart: function(cart){
             var cartPrice = 0;
-            cart.forEach(function(cake){
-                cartPrice += cake.price;
-            })
+            if(cart !== undefined){
+                cart.forEach(function(cake){
+                    cartPrice += cake.price;
+                })
+            }
             return cartPrice;
         },
-        addToCart: function (cake) {
+        // addToCart: function (cake) {
 
-            console.log("add to cart received cake", cake)
+        //     console.log("add to cart received cake", cake)
 
-            $state.go("signup")
+        //     $state.go("signup")
 
-            if (AuthService.isAuthenticated()) {
+        //     if (AuthService.isAuthenticated()) {
 
-                AuthService.getLoggedInUser().then(function (user) {
-                    return $http.put('/api/cart/update', { cart : cake, user : user }, function (data) {
-                        console.log('data', data);
-                        // return data; 
-                    });
-                });
+        //         AuthService.getLoggedInUser().then(function (user) {
+        //             return $http.put('/api/cart/update', { cart : cake, user : user }, function (data) {
+        //                 console.log('data', data);
+        //                 // return data; 
+        //             });
+        //         });
 
-            } else {
+        //     } else {
 
-                StoreFCT.addToUnauthCart($localStorage, [], cake);
+        //         StoreFCT.addToUnauthCart($localStorage, [], cake);
 
-            }
-        },
+        //     }
+        // },
         
-        removeFromCart: function (cake) {
+        // removeFromCart: function (cake) {
 
-            if (AuthService.isAuthenticated()) {
+        //     if (AuthService.isAuthenticated()) {
 
-                AuthService.getLoggedInUser().then(function (user) {
-                    StoreFCT.removeFromAuthCart(user, cake, CartFactory);
-                });
+        //         AuthService.getLoggedInUser().then(function (user) {
+        //             StoreFCT.removeFromAuthCart(user, cake, CartFactory);
+        //         });
 
-            } else {
+        //     } else {
 
-                StoreFCT.removeFromUnauthCart($localStorage, [], cake);
+        //         StoreFCT.removeFromUnauthCart($localStorage, [], cake);
 
-            }
+        //     }
 
-        }
+        // }
 
    };
 

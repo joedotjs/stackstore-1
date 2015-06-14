@@ -1,4 +1,4 @@
-app.factory('StoreSingleFCT', function ($http, AuthService, StoreFCT, $localStorage, CartFactory) {
+app.factory('StoreSingleFCT', function ($http, $state, $rootScope, AuthService, StoreFCT, $localStorage, CartFactory) {
 
     var getAll = function(storeId) {
         return $http.get(`/api/store/${storeId}`, function (data) {
@@ -18,6 +18,7 @@ app.factory('StoreSingleFCT', function ($http, AuthService, StoreFCT, $localStor
             var cartData = []
             StoreFCT.addToUnauthCart($localStorage, cartData, cake);
         }
+        $state.go("added-item")
     }
 
 
@@ -32,10 +33,13 @@ app.factory('StoreSingleFCT', function ($http, AuthService, StoreFCT, $localStor
         }
     }
 
+
     return {
         getAll: getAll,
         addToCart: addToCart,
         removeFromCart: removeFromCart
     };
+
+
 
 });

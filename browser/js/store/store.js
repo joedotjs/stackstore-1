@@ -36,12 +36,24 @@ app.controller('StoreSingleCtrl', function ($scope, AuthService, $state, StoreSi
 
     $scope.removeFromCart = StoreSingleFCT.removeFromCart
 
+    $scope.storeId = $stateParams.storeId
+
 
 
 });
 
-app.controller('StoreCtrl', function ($scope, AuthService, $state, StoreFCT, $localStorage, CartFactory) {
+app.controller('StoreCtrl', function ($rootScope, $scope, AuthService, $state, StoreFCT, $localStorage, CartFactory) {
 
+    $rootScope.currentStore = undefined;
+
+    $scope.storeCast = function(store){
+        
+        console.log("ran a func and a ui-sref!")
+        
+        // $rootScope.$emit('storeCast', { store: store}); 
+        $rootScope.currentStore = store;
+    
+    }
 
     StoreFCT.getAllStores().then(function (data) {
         console.log('DATA', data.data);

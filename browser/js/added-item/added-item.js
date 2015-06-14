@@ -7,10 +7,16 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('AddedItemCtrl', function ($scope, AuthService, $state, CakeFactory, $localStorage, StoreFCT) {
+app.controller('AddedItemCtrl', function ($rootScope, $scope, AuthService, $state, CakeFactory, $localStorage, StoreFCT) {
 
-	$scope.storeOfLastPurchase = $localStorage.cart[$localStorage.cart.length-1].storeId
-
-	console.log(StoreFCT.getAllStores())
+	
+	$scope.lastCake = $localStorage.cart[$localStorage.cart.length-1]
+	// $scope.storeId = $scope.lastCake.storeId
+	// $rootScope.$on('storeCast', function (event, args) {
+	// 	$scope.currentStore = args.store;
+	// 	$scope.$digest()
+	// 	console.log($scope.currentStore);
+	// });
+	$scope.currentStore = $rootScope.currentStore
 
 });
