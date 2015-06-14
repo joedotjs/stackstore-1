@@ -47,13 +47,13 @@ app.config(function ($stateProvider) {
 });
 
 
-app.controller('CartCtrl', function ($scope, $rootScope, $state, $stateParams, $localStorage, CartFactory, OrderFactory, getCartOfCakes, isAuthenticated) {
+app.controller('CartCtrl', function ($scope, $state, $stateParams, $localStorage, CartFactory, OrderFactory, getCartOfCakes, isAuthenticated) {
 
     $scope.cart = getCartOfCakes;
 
     $scope.price = CartFactory.calculateCart($scope.cart);
 
-    $scope.currentStore = $rootScope.currentStore;
+    $scope.currentStore = $localStorage.currentStore;
 
     console.log("$scope.currentStore", $scope.currentStore)
 

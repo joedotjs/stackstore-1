@@ -1,4 +1,4 @@
-app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, $state, CartFactory, StoreSingleFCT) {
+app.directive('buildForm', function (CakeFactory, $rootScope, $localStorage, $stateParams, $state, CartFactory, StoreSingleFCT) {
 
     return {
         restrict: 'E',
@@ -6,7 +6,7 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, $
         templateUrl: 'js/common/directives/cake-builder-form/cake-builder-form.html',
         link: function (scope) {
 
-
+                console.log("current store (should not be undefined)", $rootScope.currentStore )
 
                 CakeFactory.getAllIngredients($stateParams.storeId).then(function(ingredients){
 
@@ -54,6 +54,7 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, $
                             {position: 2, filling: null},
                             {position: 3, filling: null}
                         ]
+
 
 
 
@@ -200,7 +201,8 @@ app.directive('buildForm', function (CakeFactory, $localStorage, $stateParams, $
                     
                     // //bring storeCake function to scope
                     scope.storeCake = function(cake){
-                        
+                        if(cake.numOrdered === undefined) cake.numOrdered = 1;
+                        console.log("check on add to see if numOrdered is autopopulated", cake)
                         delete $localStorage.cake
                         delete $localStorage.currentPrices
                         StoreSingleFCT.addToCart(cake)

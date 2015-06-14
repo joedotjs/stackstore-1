@@ -17,6 +17,6 @@ app.controller('AddedItemCtrl', function ($rootScope, $scope, AuthService, $stat
 	// 	$scope.$digest()
 	// 	console.log($scope.currentStore);
 	// });
-	$scope.currentStore = $rootScope.currentStore
+	$scope.currentStore = $localStorage.currentStore
 
 });

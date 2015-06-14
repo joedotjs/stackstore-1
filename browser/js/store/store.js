@@ -36,7 +36,7 @@ app.controller('StoreSingleCtrl', function ($scope, AuthService, $state, StoreSi
 
     $scope.removeFromCart = StoreSingleFCT.removeFromCart
 
-    $scope.storeId = $stateParams.storeId
+    $scope.currentStore = $localStorage.currentStore
 
 
 
@@ -51,7 +51,7 @@ app.controller('StoreCtrl', function ($rootScope, $scope, AuthService, $state, S
         console.log("ran a func and a ui-sref!")
         
         // $rootScope.$emit('storeCast', { store: store}); 
-        $rootScope.currentStore = store;
+        $localStorage.currentStore = store;
     
     }
 
