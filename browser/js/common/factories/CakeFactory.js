@@ -1,4 +1,4 @@
-app.factory('CakeFactory', function ($http, $localStorage, CartFactory, AuthService, $state) {
+app.factory('CakeFactory', function ($http, $localStorage, CartFactory, AuthService) {
 
     return {
 
@@ -38,7 +38,7 @@ app.factory('CakeFactory', function ($http, $localStorage, CartFactory, AuthServ
             {
                 console.log(cakeObj)
                 CartFactory.addToCart(cakeObj)
-                $state.go("signup")
+                
 
             }
         }

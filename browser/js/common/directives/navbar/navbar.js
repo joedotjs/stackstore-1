@@ -19,8 +19,10 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) 
 
             AuthService.getLoggedInUser().then(function (user) {
                 console.log(user);
-                if(!user.storeId) {
-                    scope.items.push({ label: 'Create A Store', state: 'storeCreate', auth: true });
+                if(user){
+                    if(!user.storeId) {
+                        scope.items.push({ label: 'Create A Store', state: 'storeCreate', auth: true });
+                    }
                 }
             });
 
